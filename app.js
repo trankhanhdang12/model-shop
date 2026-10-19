@@ -5,7 +5,10 @@ const session = require("express-session");
 
 const db = require("./db");
 const defaultProducts = require("./data");
-
+const {
+    calculateDiscount,
+    calculateShippingFee
+} = require("./services/pricing");
 const app = express();
 const usersFile = path.join(__dirname, "users.json");
 
