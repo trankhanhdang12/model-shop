@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TKD - Shop</title>
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/css/main.css">
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/css/base.css">
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/css/grid.css">
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/css/responsive.css">
+    <link rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css">
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/fontawesome-free-6.6.0-web/css/all.min.css">
+</head>
+
+<body>
+<div class="app">
+    <header class="header">
+        <div class="grid wide">
+            <nav class="header__navbar hide-on-mobile-tablet">
+                <ul class="header__navbar-list">
+                    <li class="header__navbar-item header__navbar-item--separate">Thế giới mô hình TKD - Shop</li>
+                    <li class="header__navbar-item">
+                        <span class="header__navbar-title--no-pointer">Kết nối</span>
+                        <a href="https://www.facebook.com/sach.mot.714" class="header__navbar-icon-link">
+                            <i class="header__navbar-icon fa-brands fa-facebook"></i>
+                        </a>
+                        <a href="https://www.instagram.com/sach.mot.714/" class="header__navbar-icon-link">
+                            <i class="header__navbar-icon fa-brands fa-instagram"></i>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="header__navbar-list">
+                    <li class="header__navbar-item header__navbar-item--has-notify">
+                        <a href="javascript:void(0)" class="header__navbar-item-link">
+                            <i class="header__navbar-icon fa-regular fa-bell"></i> Thông báo
+                        </a>
+
+                        <div class="header__notify">
+                            <header class="header__notify-header">
+                                <h3>Thông báo mới nhận</h3>
+                            </header>
+
+                            <ul class="header__notify-list">
+                                <% if (notifications && notifications.length > 0) { %>
+                                    <% notifications.forEach(item => { %>
+                                        <li class="header__notify-item header__notify-item--viewed">
+                                            <a href="<%= item.link && item.link.trim() ? item.link : 'javascript:void(0)' %>" class="header__notify-link">
+                                                <img
+                                                        src="<%= item.image && item.image.trim() ? item.image : '/legacy/source_code-byTKD/assets/img/Notification/2Update.jpeg' %>"
+                                                        alt="Ảnh"
+                                                        class="header__notify-img"
+                                                >
+                                                <div class="header__notify-info">
+                                                    <span class="header__notify-name"><%= item.title %></span>
+                                                    <span class="header__notify-descriotion"><%= item.message %></span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    <% }) %>
+                                <% } else { %>
+                                    <li class="header__notify-item header__notify-item--viewed">
+                                        <a href="javascript:void(0)" class="header__notify-link">
+                                            <img src="/legacy/source_code-byTKD/assets/img/Notification/2Update.jpeg" alt="Ảnh" class="header__notify-img">
+                                            <div class="header__notify-info">
+                                                <span class="header__notify-name">Chưa có thông báo</span>
+                                                <span class="header__notify-descriotion">Hiện tại chưa có thông báo mới từ cửa hàng</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                <% } %>
+                            </ul>
+
+                            <footer class="header__notify-footer">
+                                <a href="/notifications" class="header__notify-footer-btn">Xem tất cả</a>
+                            </footer>
+                        </div>
+                    </li>
+
+                    <li class="header__navbar-item">
+                        <a href="/help" class="header__navbar-item-link">
+                            <i class="header__navbar-icon fa-solid fa-question"></i>
+                            Trợ giúp
+                        </a>
+                    </li>
+
+                    <% if (user) { %>
+                        <li class="header__navbar-item header__navbar-user">
+                            <span class="header__navbar-user-name">
+                                Xin chào <b><%= user.email.split("@")[0] %></b>
+                            </span>
+                        </li>
+
+                        <% if (role !== "admin") { %>
+                            <li class="header__navbar-item">
+                                <a href="/profile" class="logout-btn">
+                                    <i class="fa-solid fa-user"></i> Hồ sơ
+                                </a>
+                            </li>
+                        <% } %>
+
+                        <% if (role === "admin") { %>
+                            <li class="header__navbar-item">
+                                <a href="/admin" class="header__admin-link">
+                                    <i class="fa-solid fa-gear"></i> Admin
+                                </a>
+                            </li>
+                        <% } %>
+
+                        <li class="header__navbar-item">
+                            <form action="/logout" method="POST" class="logout-form">
+                                <button type="submit" class="logout-btn">Đăng xuất</button>
+                            </form>
+                        </li>
+                    <% } else { %>
+                        <li class="header__navbar-item header__navbar-item--strong header__navbar-item--separate">
+                            <a href="/register" class="header__navbar-item-link auth-link">Đăng ký</a>
+                        </li>
+
+                        <li class="header__navbar-item header__navbar-item--strong">
+                            <a href="/login" class="header__navbar-item-link auth-link">Đăng nhập</a>
+                        </li>
+                    <% } %>
+                </ul>
+            </nav>
+
+            <div class="header-with-search">
+                <input type="checkbox" hidden id="header-menu-checkbox" class="header__menu-checkbox">
+                <input type="checkbox" hidden id="header-search-checkbox" class="header__search-checkbox">
+
+                <div class="header-mobile">
+                    <label for="header-menu-checkbox" class="header__mobile-menu">
+                        <i class="header__mobile-menu-icon fa-solid fa-bars"></i>
+                    </label>
+                    <label for="header-search-checkbox" class="header__mobile-search">
+                        <i class="header__mobile-search-icon fa-solid fa-magnifying-glass"></i>
+                    </label>
+                </div>
+
+                <label for="header-menu-checkbox" class="header-overlay"></label>
+
+                <nav class="nav__mobile">
+                    <label for="header-menu-checkbox" class="nav__mobile-close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </label>
+
+                    <ul class="nav__mobile-list">
+                        <% if (!user) { %>
+                            <li class="nav__mobile-item">
+                                <a href="/login" class="nav__mobile-link">
+                                    <i class="nav__mobile-icon fa-solid fa-user-pen"></i> Đăng nhập
+                                </a>
+                            </li>
+                            <li class="nav__mobile-item">
+                                <a href="/register" class="nav__mobile-link">
+                                    <i class="nav__mobile-icon fa-solid fa-user-plus"></i> Đăng ký
+                                </a>
+                            </li>
+                        <% } else { %>
+                            <li class="nav__mobile-item">
+                                <span class="nav__mobile-link">Xin chào, <%= user.email %></span>
+                            </li>
+                            <li class="nav__mobile-item">
+                                <form action="/logout" method="POST">
+                                    <button type="submit" class="nav__mobile-link" style="background:none;border:none;cursor:pointer;">
+                                        Đăng xuất
+                                    </button>
+                                </form>
+                            </li>
+                        <% } %>
+
+                        <li class="nav__mobile-item">
+                            <a href="/help" class="nav__mobile-link">Trợ giúp</a>
+                        </li>
+                        <li class="nav__mobile-item">
+                            <a href="/notifications" class="nav__mobile-link">Thông báo</a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="header__logo hide-on-tablet">
+                    <a href="/" class="header__logo-link">
+                        <img src="/legacy/source_code-byTKD/assets/img/logo_shop.png" alt="Logo" class="header__logo-img">
+                    </a>
+                </div>
+
+                <form action="/" method="GET" class="header__search hide-on-mobile" id="searchForm">
+                    <div class="header__search-input-wrap">
+                        <input
+                                type="text"
+                                name="q"
+                                id="searchInput"
+                                class="header__search-input"
+                                placeholder="Nhập để tìm kiếm sản phẩm"
+                                value="<%= keyword || '' %>"
+                                autocomplete="off"
+                        >
+
+                        <div class="header__search-history" id="searchDropdown">
+                            <div class="header__search-history-header">
+                                <h3 class="header__search-history-heading">Lịch sử tìm kiếm</h3>
+
+                                <% if (user && searchHistories && searchHistories.length > 0) { %>
+                                    <button type="button" class="search-history-clear-btn" id="clearAllHistoryBtn">
+                                        Xóa tất cả
+                                    </button>
+                                <% } %>
+                            </div>
+
+                            <ul class="header__search-history-list" id="searchHistoryList">
+                                <% if (user && searchHistories && searchHistories.length > 0) { %>
+                                    <% searchHistories.forEach((item) => { %>
+                                        <li class="header__search-history-item">
+                                            <a href="/?q=<%= encodeURIComponent(item) %>"><%= item %></a>
+                                            <button
+                                                    type="button"
+                                                    class="search-history-delete-btn"
+                                                    data-keyword="<%= item %>"
+                                            >
+                                                ×
+                                            </button>
+                                        </li>
+                                    <% }) %>
+                                <% } else { %>
+                                    <li class="header__search-history-empty">Chưa có lịch sử tìm kiếm</li>
+                                <% } %>
+                            </ul>
+
+                            <ul class="header__search-suggest-list" id="searchSuggestList"></ul>
+                        </div>
+                    </div>
+
+                    <div class="header__search-select">
+                        <span class="header__search-select-label">Trong Shop</span>
+                        <i class="header__search-select-icon fa-solid fa-angle-down"></i>
+                    </div>
+
+                    <button type="submit" class="header__search-btn">
+                        <i class="header__search-btn-icon fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+
+                <div class="header__cart">
+                    <input type="checkbox" hidden id="header-cart-mobile-checkbox" class="header__cart-mobilecheckbox">
+                    <label for="header-cart-mobile-checkbox" class="header-cart-mobile-overlay"></label>
+
+                    <nav class="nav__mobile-cart">
+                        <div class="nav__mobile-cart-all">
+                            <label for="header-cart-mobile-checkbox" class="nav__cart-mobile-close">
+                                <a href="javascript:void(0)">Thoát</a>
+                            </label>
+
+                            <button class="nav__cart-mobile-btn">
+                                <a href="/cart" class="nav__cart-mobile-btn-link">Xem Giỏ Hàng</a>
+                            </button>
+                        </div>
+
+                        <% if (!cart || cart.length === 0) { %>
+                            <div class="header__cart-empty">
+                                <img src="/legacy/source_code-byTKD/assets/img/no_cart.png" alt="Chưa có sản phẩm" class="header__cart-no-cart-img">
+                                <span class="header__cart-list-no-cart-msg">Chưa có sản phẩm</span>
+                            </div>
+                        <% } else { %>
+                            <div class="nav__cart-mobile-cart">
+                                <% cart.forEach(item => { %>
+                                    <div style="display:flex; gap:10px; align-items:center; padding:10px 12px;">
+                                        <img src="<%= item.image %>" style="width:48px;height:48px;object-fit:cover;border:1px solid #eee;border-radius:4px;">
+                                        <div style="flex:1;">
+                                            <div style="font-size:13px;font-weight:600;"><%= item.name %></div>
+                                            <div style="font-size:12px;color:#888;">ID: <%= item.id %></div>
+                                        </div>
+                                        <div style="font-size:13px;color:#ee4d2d;font-weight:700;">
+                                            <%= (item.price || 0).toLocaleString('vi-VN') %>đ
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            </div>
+                        <% } %>
+                    </nav>
+
+                    <label for="header-cart-mobile-checkbox" class="header__cart-wrap">
+                        <i class="header__cart-icon fa-solid fa-cart-shopping"></i>
+
+                        <span class="header__cart-notice quantify">
+                            <%= (cart || []).reduce((sum, item) => sum + (item.qty || 1), 0) %>
+                        </span>
+
+                        <div class="header__cart-list <%= !cart || cart.length === 0 ? 'header__cart-list--no-cart' : '' %>">
+                            <% if (!cart || cart.length === 0) { %>
+                                <img src="/legacy/source_code-byTKD/assets/img/no_cart.png" alt="" class="header__cart-no-cart-img">
+                                <span class="header__cart-list-no-cart-msg">Chưa có sản phẩm</span>
+                            <% } else { %>
+                                <h4 class="header__cart-heading">Sản phẩm đã thêm</h4>
+
+                                <ul class="header__cart-list-item">
+                                    <% cart.forEach(item => { %>
+                                        <li class="header__cart-item">
+                                            <img src="<%= item.image %>" alt="<%= item.name %>" class="header__cart-img">
+
+                                            <div class="header__cart-item-info">
+                                                <div class="header__cart-item-head">
+                                                    <h5 class="header__cart-item-name"><%= item.name %></h5>
+
+                                                    <div class="header__cart-item-price-wrap">
+                                                        <span class="header__cart-item-price"><%= (item.price || 0).toLocaleString("vi-VN") %>đ</span>
+                                                        <span class="header__cart-item-multiply">x</span>
+                                                        <span class="header__cart-item-qnt"><%= item.qty || 1 %></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="header__cart-item-body">
+                                                    <span class="header__cart-item-description">
+                                                        Thương hiệu: <%= item.brand || "Chưa cập nhật" %>
+                                                    </span>
+                                                </div>
+
+                                                <div class="mini-cart-actions">
+                                                    <form action="/cart/decrease/<%= item.id %>" method="POST">
+                                                        <button type="submit" class="mini-cart-btn">-</button>
+                                                    </form>
+
+                                                    <span class="mini-cart-qty"><%= item.qty || 1 %></span>
+
+                                                    <form action="/cart/increase/<%= item.id %>" method="POST">
+                                                        <button type="submit" class="mini-cart-btn">+</button>
+                                                    </form>
+
+                                                    <form action="/cart/remove/<%= item.id %>" method="POST" class="mini-cart-remove-form">
+                                                        <button type="submit" class="mini-cart-remove">Xoá</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    <% }) %>
+                                </ul>
+
+                                <a href="/cart" class="header__cart-view-cart btn btn--primary">Xem giỏ hàng</a>
+                            <% } %>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <ul class="header__sort-bar">
+            <li class="header__sort-item header__sort-item--active">
+                <a href="" class="header__sort-link">Phổ biến</a>
+            </li>
+            <li class="header__sort-item">
+                <a href="" class="header__sort-link">Mới nhất</a>
+            </li>
+            <li class="header__sort-item">
+                <a href="" class="header__sort-link">Bán chạy</a>
+            </li>
+            <li class="header__sort-item">
+                <a href="" class="header__sort-link">Giá</a>
+            </li>
+        </ul>
+    </header>
+
+    <div class="app__container">
+        <div class="grid wide">
+            <div class="row sm-gutter app__content">
+                <div class="col l-2 m-0 c-0">
+                    <nav class="category">
+                        <h3 class="category__heading">
+                            <i class="category__heading-icon fa-solid fa-bars"></i> Mô hình
+                        </h3>
+                        <ul class="category-list">
+                            <li class="category-item <%= !category ? 'category-item--active' : '' %>">
+                                <a href="/?q=<%= keyword || '' %><%= sort ? '&sort=' + encodeURIComponent(sort) : '' %>" class="category-item__link">
+                                    Tất cả
+                                </a>
+                            </li>
+
+                            <li class="category-item <%= category === 'Dragon Ball' ? 'category-item--active' : '' %>">
+                                <a href="/?category=Dragon%20Ball<%= keyword ? '&q=' + encodeURIComponent(keyword) : '' %><%= sort ? '&sort=' + encodeURIComponent(sort) : '' %>" class="category-item__link">
+                                    Dragon Ball
+                                </a>
+                            </li>
+
+                            <li class="category-item <%= category === 'One Piece' ? 'category-item--active' : '' %>">
+                                <a href="/?category=One%20Piece<%= keyword ? '&q=' + encodeURIComponent(keyword) : '' %><%= sort ? '&sort=' + encodeURIComponent(sort) : '' %>" class="category-item__link">
+                                    One Piece
+                                </a>
+                            </li>
+
+                            <li class="category-item <%= category === 'Naruto' ? 'category-item--active' : '' %>">
+                                <a href="/?category=Naruto<%= keyword ? '&q=' + encodeURIComponent(keyword) : '' %><%= sort ? '&sort=' + encodeURIComponent(sort) : '' %>" class="category-item__link">
+                                    Naruto
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="col l-10 m-12 c-12 bo-kc">
+                    <div class="home-filter hide-on-mobile-tablet">
+                        <span class="home-filter__label">Sắp xếp theo</span>
+
+                        <a href="/?sort=popular<%= keyword ? '&q=' + encodeURIComponent(keyword) : '' %><%= category ? '&category=' + encodeURIComponent(category) : '' %>"
+                           class="home-filter__btn btn <%= !sort || sort === 'popular' ? 'btn--primary' : '' %>">
+                            Phổ biến
+                        </a>
+
+                        <a href="/?sort=newest<%= keyword ? '&q=' + encodeURIComponent(keyword) : '' %><%= category ? '&category=' + encodeURIComponent(category) : '' %>"
+                           class="home-filter__btn btn <%= sort === 'newest' ? 'btn--primary' : '' %>">
+                            Mới nhất
+                        </a>
+
+                        <a href="/?sort=best_selling<%= keyword ? '&q=' + encodeURIComponent(keyword) : '' %><%= category ? '&category=' + encodeURIComponent(category) : '' %>"
+                           class="home-filter__btn btn <%= sort === 'best_selling' ? 'btn--primary' : '' %>">
+                            Bán chạy
+                        </a>
+
+                        <div class="select-input">
+                            <span class="select-input__label">
+                                <% if (sort === "price_asc") { %>
+                                    Giá: thấp đến cao
+                                <% } else if (sort === "price_desc") { %>
+                                    Giá: cao đến thấp
+                                <% } else { %>
+                                    Giá
+                                <% } %>
+                            </span>
+                            <i class="select-input__icon fa-solid fa-angle-down"></i>
+
+                            <ul class="select-input__list">
+                                <li class="select-input__item">
+                                    <a href="/?sort=price_asc<%= keyword ? '&q=' + encodeURIComponent(keyword) : '' %><%= category ? '&category=' + encodeURIComponent(category) : '' %>" class="select-input__link">
+                                        Giá: thấp đến cao
+                                    </a>
+                                </li>
+                                <li class="select-input__item">
+                                    <a href="/?sort=price_desc<%= keyword ? '&q=' + encodeURIComponent(keyword) : '' %><%= category ? '&category=' + encodeURIComponent(category) : '' %>" class="select-input__link">
+                                        Giá: cao đến thấp
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="home-filter__page">
+                            <span class="home-filter__page-num">
+                                <span class="home-filter__page-current"><%= page %></span>/<%= totalPages %>
+                            </span>
+
+                            <div class="home-filter__page-control">
+                                <% if (page > 1) { %>
+                                    <a href="/?page=<%= page - 1 %><%= keyword ? '&q=' + encodeURIComponent(keyword) : '' %><%= category ? '&category=' + encodeURIComponent(category) : '' %><%= sort ? '&sort=' + encodeURIComponent(sort) : '' %>" class="home-filter__page-btn">
+                                        <i class="home-filter__page-icon fa-solid fa-angle-left"></i>
+                                    </a>
+                                <% } else { %>
+                                    <span class="home-filter__page-btn home-filter__page-btn--disabled">
+                                        <i class="home-filter__page-icon fa-solid fa-angle-left"></i>
+                                    </span>
+                                <% } %>
+
+                                <% if (page < totalPages) { %>
+                                    <a href="/?page=<%= page + 1 %><%= keyword ? '&q=' + encodeURIComponent(keyword) : '' %><%= category ? '&category=' + encodeURIComponent(category) : '' %><%= sort ? '&sort=' + encodeURIComponent(sort) : '' %>" class="home-filter__page-btn">
+                                        <i class="home-filter__page-icon fa-solid fa-angle-right"></i>
+                                    </a>
+                                <% } else { %>
+                                    <span class="home-filter__page-btn home-filter__page-btn--disabled">
+                                        <i class="home-filter__page-icon fa-solid fa-angle-right"></i>
+                                    </span>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <nav class="mobile-categogy">
+                        <ul class="mobile-categogy__list">
+                            <li class="mobile-categogy__item">
+                                <a href="" class="mobile-categogy__link">Dragon Ball</a>
+                            </li>
+                            <li class="mobile-categogy__item">
+                                <a href="" class="mobile-categogy__link">One Piece</a>
+                            </li>
+                            <li class="mobile-categogy__item">
+                                <a href="" class="mobile-categogy__link">Naruto</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div class="home-product">
+                        <div class="row sm-gutter">
+                            <% products.forEach(p => { %>
+                                <div class="col l-2-4 m-4 c-6">
+                                    <div class="home-product-item-wrap">
+                                        <a class="home-product-item" href="/product/<%= p.id %>">
+                                            <div class="home-product-item__img" style="background-image: url('<%= p.image %>');"></div>
+
+                                            <h4 class="home-product-item__name"><%= p.name %></h4>
+
+                                            <div class="home-product-item__price">
+                                                <span class="home-product-item__price-old">
+                                                    <%= (p.oldPrice || p.price).toLocaleString("vi-VN") %>đ
+                                                </span>
+                                                <span class="home-product-item__price-current">
+                                                    <%= (p.price || 0).toLocaleString("vi-VN") %>đ
+                                                </span>
+                                            </div>
+
+                                            <div class="home-product-item__action">
+                                                <form action="/favorites/toggle/<%= p.id %>" method="POST" style="display:inline;">
+                                                    <button type="submit" style="border:none;background:none;padding:0;cursor:pointer;">
+                                                        <span class="home-product-item__like <%= p.isFavorite ? 'home-product-item__like--liked' : '' %>">
+                                                            <i class="home-product-item__like-icon-empty fa-regular fa-heart"></i>
+                                                            <i class="home-product-item__like-icon-fill fa-solid fa-heart"></i>
+                                                        </span>
+                                                    </button>
+                                                </form>
+
+                                                <span style="font-size:13px;color:#666;margin-left:4px;">
+                                                    <%= p.favoriteCount || 0 %>
+                                                </span>
+
+                                                <div class="home-product-item__rating">
+                                                    <%
+                                                        const rounded = Math.round(p.avgRating || 0);
+                                                    for (let i = 1; i <= 5; i++) {
+                                                    %>
+                                                        <i class="<%= i <= rounded ? 'home-product-item__star--gold' : '' %> fa-solid fa-star"></i>
+                                                    <% } %>
+                                                </div>
+
+                                                <span class="home-product-item__sold"><%= p.reviewCount || 0 %> đánh giá</span>
+                                            </div>
+
+                                            <div class="home-product-item__origin">
+                                                <span class="home-product-item__brand"><%= p.brand || "Chưa cập nhật" %></span>
+                                                <span class="home-product-item__origin-name">Nhật Bản</span>
+                                            </div>
+
+                                            <div class="home-product-item__favaurite">
+                                                <i class="fa-solid fa-check"></i>
+                                                <span>Yêu thích</span>
+                                            </div>
+
+                                            <% if ((p.discountPercent || 0) > 0) { %>
+                                                <div class="home-product-item__sale-off">
+                                                    <span class="home-product-item__sale-off-percent"><%= p.discountPercent %>%</span>
+                                                    <span class="home-product-item__sale-off-label">GIẢM</span>
+                                                </div>
+                                            <% } %>
+                                        </a>
+
+                                        <form action="/cart/add/<%= p.id %>" method="POST" class="home-product-item__cart-form">
+                                            <button type="submit" class="btn-add-cart">
+                                                <i class="fa-solid fa-cart-plus"></i>
+                                                Thêm vào giỏ
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+
+                    <ul class="pagination home-product__pagination">
+                        <li class="pagination-item">
+                            <% if (page > 1) { %>
+                                <a href="/?page=<%= page - 1 %><%= keyword ? '&q=' + encodeURIComponent(keyword) : '' %><%= category ? '&category=' + encodeURIComponent(category) : '' %><%= sort ? '&sort=' + encodeURIComponent(sort) : '' %>" class="pagination-item__link">
+                                    <i class="pagination-item__icon fa-solid fa-angle-left"></i>
+                                </a>
+                            <% } else { %>
+                                <span class="pagination-item__link" style="opacity:0.4;cursor:default;">
+                                    <i class="pagination-item__icon fa-solid fa-angle-left"></i>
+                                </span>
+                            <% } %>
+                        </li>
+
+                        <% for(let i = 1; i <= totalPages; i++) { %>
+                            <li class="pagination-item <%= page === i ? 'pagination-item--active' : '' %>">
+                                <a href="/?page=<%= i %><%= keyword ? '&q=' + encodeURIComponent(keyword) : '' %><%= category ? '&category=' + encodeURIComponent(category) : '' %><%= sort ? '&sort=' + encodeURIComponent(sort) : '' %>" class="pagination-item__link"><%= i %></a>
+                            </li>
+                        <% } %>
+
+                        <li class="pagination-item">
+                            <% if (page < totalPages) { %>
+                                <a href="/?page=<%= page + 1 %><%= keyword ? '&q=' + encodeURIComponent(keyword) : '' %><%= category ? '&category=' + encodeURIComponent(category) : '' %><%= sort ? '&sort=' + encodeURIComponent(sort) : '' %>" class="pagination-item__link">
+                                    <i class="pagination-item__icon fa-solid fa-angle-right"></i>
+                                </a>
+                            <% } else { %>
+                                <span class="pagination-item__link" style="opacity:0.4;cursor:default;">
+                                    <i class="pagination-item__icon fa-solid fa-angle-right"></i>
+                                </span>
+                            <% } %>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="grid wide footer__content">
+        <div class="row">
+            <div class="col l-2-4 m-4 c-6">
+                <h3 class="footer__heading">Chăm sóc khách hàng</h3>
+                <ul class="footer-list">
+                    <li class="footer-item">
+                        <a href="/help" class="footer-item__link">Trung tâm trợ giúp</a>
+                    </li>
+                    <li class="footer-item">
+                        <a href="/mall" class="footer-item__link">TKD - Shop Mall</a>
+                    </li>
+                    <li class="footer-item">
+                        <a href="/buy-guide" class="footer-item__link">Hướng dẫn mua hàng</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col l-2-4 m-4 c-6 bo-kc">
+                <h3 class="footer__heading">Giới thiệu về TKD - Shop</h3>
+                <ul class="footer-list">
+                    <li class="footer-item">
+                        <a href="/about" class="footer-item__link">Giới thiệu về TKD - Shop Việt Nam</a>
+                    </li>
+                    <li class="footer-item">
+                        <a href="/careers" class="footer-item__link">Tuyển dụng</a>
+                    </li>
+                    <li class="footer-item">
+                        <a href="/terms" class="footer-item__link">Điều khoản TKD - Shop</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col l-2-4 m-4 c-6">
+                <h3 class="footer__heading">Danh mục</h3>
+                <ul class="footer-list">
+                    <li class="footer-item">
+                        <a href="/?category=Dragon%20Ball" class="footer-item__link">Dragon Ball</a>
+                    </li>
+                    <li class="footer-item">
+                        <a href="/?category=One%20Piece" class="footer-item__link">One Piece</a>
+                    </li>
+                    <li class="footer-item">
+                        <a href="/?category=Naruto" class="footer-item__link">Naruto</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col l-2-4 m-4 c-6 bo-kc">
+                <h3 class="footer__heading">Theo dõi</h3>
+                <ul class="footer-list">
+                    <li class="footer-item">
+                        <a href="https://www.facebook.com/sach.mot.714" target="_blank" class="footer-item__link">
+                            <i class="footer-item__icon fa-brands fa-facebook-f"></i> Facebook
+                        </a>
+                    </li>
+                    <li class="footer-item">
+                        <a href="https://www.instagram.com/sach.mot.714/" target="_blank" class="footer-item__link">
+                            <i class="footer-item__icon fa-brands fa-instagram"></i> Instagram
+                        </a>
+                    </li>
+                    <li class="footer-item">
+                        <a href="https://www.tiktok.com/@trankhanhdang2005" class="footer-item__link">
+                            <i class="footer-item__icon fa-brands fa-tiktok"></i> Tiktok
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col l-2-4 m-4 c-6">
+                <h3 class="footer__heading">Hỗ trợ khách hàng</h3>
+                <ul class="footer-list">
+                    <li class="footer-item">
+                        <a href="/policy/purchase" class="footer-item__link">Chính sách mua hàng</a>
+                    </li>
+                    <li class="footer-item">
+                        <a href="/policy/returns" class="footer-item__link">Chính sách đổi trả</a>
+                    </li>
+                    <li class="footer-item">
+                        <a href="/policy/privacy" class="footer-item__link">Chính sách bảo mật</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer__bottom">
+        <div class="grid wide">
+            <p class="footer__text">
+                © 2026 - Bản quyền thuộc về công ty TKD - Shop
+            </p>
+        </div>
+    </div>
+</footer>
+
+<script src="/legacy/source_code-byTKD/assets/js/main.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("searchInput");
+        const searchDropdown = document.getElementById("searchDropdown");
+        const searchSuggestList = document.getElementById("searchSuggestList");
+        const clearAllHistoryBtn = document.getElementById("clearAllHistoryBtn");
+        const searchForm = document.getElementById("searchForm");
+
+        let debounceTimer;
+
+        function showDropdown() {
+            if (searchDropdown) searchDropdown.classList.add("show");
+        }
+
+        function hideDropdown() {
+            if (searchDropdown) searchDropdown.classList.remove("show");
+        }
+
+        async function saveSearchHistory(keyword) {
+            try {
+                const res = await fetch("/search/history", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ keyword })
+                });
+                return await res.json();
+            } catch (err) {
+                console.error("SAVE SEARCH HISTORY CLIENT ERROR:", err);
+                return { success: false };
+            }
+        }
+
+        async function deleteOneHistory(keyword) {
+            try {
+                await fetch("/search/history/delete", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ keyword })
+                });
+                window.location.reload();
+            } catch (err) {
+                console.error("DELETE ONE HISTORY CLIENT ERROR:", err);
+            }
+        }
+
+        async function clearAllHistory() {
+            try {
+                await fetch("/search/history/clear", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" }
+                });
+                window.location.reload();
+            } catch (err) {
+                console.error("CLEAR ALL HISTORY CLIENT ERROR:", err);
+            }
+        }
+
+        async function fetchSuggestions(keyword) {
+            try {
+                const res = await fetch(`/search/suggest?q=${encodeURIComponent(keyword)}`);
+                const data = await res.json();
+                renderSuggestions(data);
+            } catch (err) {
+                console.error("FETCH SUGGESTIONS ERROR:", err);
+            }
+        }
+
+        function renderSuggestions(items) {
+            if (!searchSuggestList) return;
+
+            if (!items || items.length === 0) {
+                searchSuggestList.innerHTML = "";
+                return;
+            }
+
+            searchSuggestList.innerHTML = items.map(item => `
+                <li class="header__search-suggest-item">
+                    <a class="header__search-suggest-link" href="/product/${item.id}">
+                        <div class="search-suggest-item-content">
+                            <img class="search-suggest-thumb" src="${item.image || ''}" alt="${item.name || ''}">
+                            <div>
+                                <div class="search-suggest-name">${item.name || ""}</div>
+                                <div class="search-suggest-price">${Number(item.price || 0).toLocaleString("vi-VN")}đ</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            `).join("");
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener("focus", function () {
+                showDropdown();
+            });
+
+            searchInput.addEventListener("input", function (e) {
+                const keyword = e.target.value.trim();
+                showDropdown();
+                clearTimeout(debounceTimer);
+
+                debounceTimer = setTimeout(() => {
+                    if (keyword.length > 0) {
+                        fetchSuggestions(keyword);
+                    } else {
+                        renderSuggestions([]);
+                    }
+                }, 250);
+            });
+        }
+
+        document.addEventListener("click", function (e) {
+            if (searchForm && !searchForm.contains(e.target)) {
+                hideDropdown();
+            }
+        });
+
+        document.querySelectorAll(".search-history-delete-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const keyword = this.getAttribute("data-keyword");
+                if (keyword) deleteOneHistory(keyword);
+            });
+        });
+
+        if (clearAllHistoryBtn) {
+            clearAllHistoryBtn.addEventListener("click", function () {
+                clearAllHistory();
+            });
+        }
+
+        if (searchForm) {
+            searchForm.addEventListener("submit", async function (e) {
+                e.preventDefault();
+
+                const keyword = searchInput ? searchInput.value.trim() : "";
+                if (!keyword) {
+                    this.submit();
+                    return;
+                }
+
+                await saveSearchHistory(keyword);
+                this.submit();
+            });
+        }
+    });
+</script>
+</body>
+</html>

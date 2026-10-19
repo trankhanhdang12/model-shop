@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý sản phẩm - TKD Shop Admin</title>
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/fontawesome-free-6.6.0-web/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .admin-page {
+            max-width: 1380px;
+            margin: 30px auto;
+            padding: 0 16px 30px;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, #ee4d2d, #ff7337);
+            color: #fff;
+            border-radius: 14px;
+            padding: 22px 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .admin-header__top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .admin-title {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .admin-subtitle {
+            margin: 8px 0 0;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .admin-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .admin-btn--light {
+            background: #fff;
+            color: #ee4d2d;
+        }
+
+        .admin-btn--light:hover {
+            opacity: 0.92;
+        }
+
+        .admin-btn--dark {
+            background: rgba(255,255,255,0.16);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .admin-btn--dark:hover {
+            background: rgba(255,255,255,0.24);
+        }
+
+        .admin-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .admin-nav__item {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+            transition: 0.2s ease;
+        }
+
+        .admin-nav__item:hover {
+            transform: translateY(-2px);
+            border-color: #ee4d2d;
+        }
+
+        .admin-nav__item--active {
+            border-color: #ee4d2d;
+            background: #fff7f5;
+        }
+
+        .admin-nav__icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: #fff1ee;
+            color: #ee4d2d;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .admin-nav__title {
+            display: block;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .admin-nav__desc {
+            display: block;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .content-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+
+        .content-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .content-title {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .content-subtitle {
+            margin: 6px 0 0;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .content-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: #ee4d2d;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.95;
+        }
+
+        .btn-secondary {
+            background: #fff;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            border-color: #bbb;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        .product-table {
+            width: 100%;
+            min-width: 1350px;
+            border-collapse: collapse;
+        }
+
+        .product-table th,
+        .product-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        .product-table th {
+            background: #fff7f5;
+            color: #444;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .product-table tr:hover td {
+            background: #fffdfd;
+        }
+
+        .product-id {
+            font-weight: 700;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .product-name {
+            font-weight: 700;
+            color: #222;
+            line-height: 1.5;
+            max-width: 240px;
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: #ee4d2d;
+            white-space: nowrap;
+        }
+
+        .product-old-price {
+            display: block;
+            margin-top: 4px;
+            font-size: 12px;
+            color: #999;
+            text-decoration: line-through;
+            white-space: nowrap;
+        }
+
+        .product-discount-badge {
+            display: inline-block;
+            min-width: 58px;
+            text-align: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #fff1ee;
+            color: #ee4d2d;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .product-tag {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: #f6f6f6;
+            color: #555;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .product-thumb {
+            width: 72px;
+            height: 72px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid #eee;
+            background: #fafafa;
+        }
+
+        .discount-form {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .discount-input-wrap {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .discount-input {
+            width: 72px;
+            height: 36px;
+            border: none;
+            outline: none;
+            padding: 0 10px;
+            font-size: 14px;
+        }
+
+        .discount-suffix {
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            padding: 0 10px;
+            background: #fafafa;
+            border-left: 1px solid #eee;
+            color: #666;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .discount-save-btn {
+            height: 36px;
+            padding: 0 12px;
+            border: none;
+            border-radius: 8px;
+            background: #ee4d2d;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .discount-save-btn:hover {
+            opacity: 0.95;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .action-link,
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .action-link--edit {
+            background: #fff7f5;
+            color: #ee4d2d;
+            border: 1px solid #ffd8cd;
+        }
+
+        .action-link--edit:hover {
+            background: #ffeee8;
+        }
+
+        .action-btn--delete {
+            background: #fff2f2;
+            color: #d93025;
+            border: 1px solid #ffd3d0;
+        }
+
+        .action-btn--delete:hover {
+            background: #ffe9e7;
+        }
+
+        .action-btn {
+            border: none;
+        }
+
+        .empty-state {
+            padding: 20px 0 8px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .content-head {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="admin-page">
+
+    <div class="admin-header">
+        <div class="admin-header__top">
+            <div>
+                <h1 class="admin-title">Quản lý sản phẩm</h1>
+                <p class="admin-subtitle">Theo dõi, chỉnh sửa và cập nhật sản phẩm trong hệ thống TKD Shop</p>
+            </div>
+
+            <div class="admin-actions">
+                <a href="/" class="admin-btn admin-btn--light">
+                    <i class="fa-solid fa-house"></i>
+                    Về trang chủ
+                </a>
+
+                <a href="/admin/products/new" class="admin-btn admin-btn--dark">
+                    <i class="fa-solid fa-plus"></i>
+                    Thêm sản phẩm
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-nav">
+        <a href="/admin" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-chart-line"></i></span>
+            <span class="admin-nav__title">Dashboard</span>
+            <span class="admin-nav__desc">Xem số liệu tổng quan</span>
+        </a>
+
+        <a href="/admin/orders" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-file-invoice"></i></span>
+            <span class="admin-nav__title">Đơn hàng</span>
+            <span class="admin-nav__desc">Quản lý đơn đặt hàng</span>
+        </a>
+
+        <a href="/admin/products" class="admin-nav__item admin-nav__item--active">
+            <span class="admin-nav__icon"><i class="fa-solid fa-box-open"></i></span>
+            <span class="admin-nav__title">Sản phẩm</span>
+            <span class="admin-nav__desc">Xem danh sách sản phẩm</span>
+        </a>
+
+        <a href="/admin/products/new" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-square-plus"></i></span>
+            <span class="admin-nav__title">Thêm mới</span>
+            <span class="admin-nav__desc">Tạo sản phẩm mới</span>
+        </a>
+    </div>
+
+    <div class="content-card">
+        <div class="content-head">
+            <div>
+                <h2 class="content-title">Danh sách sản phẩm</h2>
+                <p class="content-subtitle">Quản lý toàn bộ sản phẩm đang hiển thị trên website.</p>
+            </div>
+
+            <div class="content-actions">
+                <a href="/admin/products/new" class="admin-btn btn-primary">
+                    <i class="fa-solid fa-plus"></i>
+                    Thêm sản phẩm
+                </a>
+
+                <form action="/admin/products/reset" method="POST" style="margin: 0;">
+                    <button type="submit" class="admin-btn btn-secondary" onclick="return confirm('Bạn có chắc muốn khôi phục sản phẩm gốc?')">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        Khôi phục sản phẩm gốc
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <%
+        function formatPrice(value) {
+            return Number(value || 0).toLocaleString("vi-VN") + " đ";
+        }
+        %>
+
+        <% if (!products || products.length === 0) { %>
+            <div class="empty-state">Chưa có sản phẩm nào.</div>
+        <% } else { %>
+            <div class="table-wrap">
+                <table class="product-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Giá gốc</th>
+                        <th>Giảm giá</th>
+                        <th>Giá sau giảm</th>
+                        <th>Thương hiệu</th>
+                        <th>Danh mục</th>
+                        <th>Ảnh</th>
+                        <th>Cập nhật giảm giá</th>
+                        <th>Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% products.forEach(product => { %>
+                        <%
+                            const oldPrice = Number(product.oldPrice || product.old_price || product.price || 0);
+                            const discountPercent = Number(product.discountPercent || product.discount_percent || 0);
+                            const finalPrice = Math.round(oldPrice * (100 - discountPercent) / 100);
+                        %>
+                        <tr>
+                            <td class="product-id">#<%= product.id %></td>
+
+                            <td>
+                                <div class="product-name"><%= product.name %></div>
+                            </td>
+
+                            <td>
+                                <div class="product-price"><%= formatPrice(oldPrice) %></div>
+                            </td>
+
+                            <td>
+                                <span class="product-discount-badge"><%= discountPercent %>%</span>
+                            </td>
+
+                            <td>
+                                <div class="product-price"><%= formatPrice(finalPrice) %></div>
+                                <% if (discountPercent > 0) { %>
+                                    <span class="product-old-price"><%= formatPrice(oldPrice) %></span>
+                                <% } %>
+                            </td>
+
+                            <td>
+                                <span class="product-tag"><%= product.brand || "-" %></span>
+                            </td>
+
+                            <td>
+                                <span class="product-tag"><%= product.category || "-" %></span>
+                            </td>
+
+                            <td>
+                                <img src="<%= product.image %>" alt="<%= product.name %>" class="product-thumb">
+                            </td>
+
+                            <td>
+                                <form action="/admin/products/discount/<%= product.id %>" method="POST" class="discount-form">
+                                    <div class="discount-input-wrap">
+                                        <input
+                                                type="number"
+                                                name="discount_percent"
+                                                min="0"
+                                                max="100"
+                                                value="<%= discountPercent %>"
+                                                class="discount-input"
+                                        >
+                                        <span class="discount-suffix">%</span>
+                                    </div>
+                                    <button type="submit" class="discount-save-btn">
+                                        Lưu
+                                    </button>
+                                </form>
+                            </td>
+
+                            <td>
+                                <div class="action-group">
+                                    <a href="/admin/products/edit/<%= product.id %>" class="action-link action-link--edit">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        Sửa
+                                    </a>
+
+                                    <form action="/admin/products/delete/<%= product.id %>" method="POST" style="margin: 0;" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
+                                        <button type="submit" class="action-btn action-btn--delete">
+                                            <i class="fa-solid fa-trash"></i>
+                                            Xóa
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+
+</div>
+</body>
+</html>

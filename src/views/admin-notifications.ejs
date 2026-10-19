@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý thông báo - TKD Shop</title>
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/fontawesome-free-6.6.0-web/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .page {
+            max-width: 1280px;
+            margin: 30px auto;
+            padding: 0 16px;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #ee4d2d, #ff7337);
+            color: #fff;
+            border-radius: 16px;
+            padding: 24px 26px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+        }
+
+        .page-header__top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: 34px;
+            font-weight: 800;
+        }
+
+        .page-subtitle {
+            margin: 8px 0 0;
+            font-size: 14px;
+            opacity: 0.96;
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            text-decoration: none;
+            cursor: pointer;
+            padding: 11px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-light {
+            background: #fff;
+            color: #ee4d2d;
+        }
+
+        .btn-light:hover {
+            opacity: 0.92;
+        }
+
+        .btn-dark {
+            background: rgba(255,255,255,0.16);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .btn-dark:hover {
+            background: rgba(255,255,255,0.24);
+        }
+
+        .btn-primary {
+            background: #ee4d2d;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #df4425;
+        }
+
+        .btn-outline {
+            background: #fff;
+            color: #ee4d2d;
+            border: 1px solid #f2b5a8;
+        }
+
+        .btn-outline:hover {
+            background: #fff4f1;
+        }
+
+        .btn-warning {
+            background: #fff6e8;
+            color: #b26a00;
+            border: 1px solid #ffd89a;
+        }
+
+        .btn-warning:hover {
+            background: #ffefcf;
+        }
+
+        .btn-danger {
+            background: #fff1f1;
+            color: #d93025;
+            border: 1px solid #f5b5b1;
+        }
+
+        .btn-danger:hover {
+            background: #ffe4e4;
+        }
+
+        .alert {
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background: #edf9f1;
+            color: #167c3a;
+            border: 1px solid #b7e4c7;
+        }
+
+        .alert-error {
+            background: #fff1f1;
+            color: #c62828;
+            border: 1px solid #f3b4b4;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+
+        .card-title {
+            margin: 0 0 16px;
+            font-size: 22px;
+            font-weight: 800;
+            color: #222;
+        }
+
+        .card-subtitle {
+            margin: -6px 0 18px;
+            font-size: 14px;
+            color: #777;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #444;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s ease;
+            font-family: Arial, sans-serif;
+            background: #fff;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            border-color: #ee4d2d;
+            box-shadow: 0 0 0 3px rgba(238, 77, 45, 0.10);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .checkbox-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #444;
+        }
+
+        .checkbox-wrap input {
+            width: 18px;
+            height: 18px;
+            accent-color: #ee4d2d;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .stat-box {
+            background: #fff;
+            border-radius: 14px;
+            padding: 18px;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 26px;
+            font-weight: 800;
+            color: #222;
+        }
+
+        .stat-value.orange {
+            color: #ee4d2d;
+        }
+
+        .stat-value.green {
+            color: #11875d;
+        }
+
+        .stat-value.purple {
+            color: #6a1b9a;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 980px;
+        }
+
+        .table th,
+        .table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        .table th {
+            background: #fff7f5;
+            color: #444;
+            font-weight: 700;
+        }
+
+        .table tr:hover td {
+            background: #fffdfd;
+        }
+
+        .thumb {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid #eee;
+            background: #fafafa;
+        }
+
+        .title-cell {
+            min-width: 220px;
+        }
+
+        .title-main {
+            font-size: 14px;
+            font-weight: 700;
+            color: #222;
+            line-height: 1.5;
+            margin-bottom: 4px;
+        }
+
+        .title-sub {
+            font-size: 12px;
+            color: #777;
+            line-height: 1.5;
+        }
+
+        .message-cell {
+            max-width: 280px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .link-cell a {
+            color: #ee4d2d;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .link-cell a:hover {
+            text-decoration: underline;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .badge-active {
+            background: #edf9f1;
+            color: #167c3a;
+        }
+
+        .badge-inactive {
+            background: #f3f4f6;
+            color: #666;
+        }
+
+        .badge-pinned {
+            background: #fff5e8;
+            color: #b26a00;
+        }
+
+        .badge-normal {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-group form {
+            margin: 0;
+        }
+
+        .empty-box {
+            padding: 30px 0 8px;
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .tips-box {
+            margin-top: 18px;
+            background: #fff8f5;
+            border: 1px solid #ffd8cc;
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .tips-box h4 {
+            margin: 0 0 8px;
+            font-size: 15px;
+            color: #d9481c;
+        }
+
+        .tips-box p {
+            margin: 0;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 1080px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page-title {
+                font-size: 28px;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <div class="page-header">
+        <div class="page-header__top">
+            <div>
+                <h1 class="page-title">Quản lý thông báo</h1>
+                <p class="page-subtitle">Tạo thông báo hiển thị ngoài trang chủ, ghim thông báo quan trọng và kiểm soát trạng thái hiển thị.</p>
+            </div>
+
+            <div class="page-actions">
+                <a href="/admin" class="btn btn-light">
+                    <i class="fa-solid fa-chart-line"></i>
+                    Dashboard
+                </a>
+
+                <a href="/" class="btn btn-dark">
+                    <i class="fa-solid fa-house"></i>
+                    Về trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <% if (success) { %>
+        <div class="alert alert-success">
+            <i class="fa-solid fa-circle-check"></i>
+            <%= success %>
+        </div>
+    <% } %>
+
+    <% if (error) { %>
+        <div class="alert alert-error">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <%= error %>
+        </div>
+    <% } %>
+
+    <div class="stats-row">
+        <div class="stat-box">
+            <div class="stat-label">Tổng thông báo</div>
+            <div class="stat-value orange"><%= notifications ? notifications.length : 0 %></div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-label">Đang hiển thị</div>
+            <div class="stat-value green"><%= notifications ? notifications.filter(item => item.is_active).length : 0 %></div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-label">Đã tắt</div>
+            <div class="stat-value"><%= notifications ? notifications.filter(item => !item.is_active).length : 0 %></div>
+        </div>
+
+        <div class="stat-box">
+            <div class="stat-label">Đang ghim</div>
+            <div class="stat-value purple"><%= notifications ? notifications.filter(item => item.is_pinned).length : 0 %></div>
+        </div>
+    </div>
+
+    <div class="grid-layout">
+        <div>
+            <div class="card">
+                <h2 class="card-title">Tạo thông báo mới</h2>
+                <p class="card-subtitle">Thông báo sau khi tạo sẽ có thể hiển thị ở dropdown “Thông báo” trên trang chủ.</p>
+
+                <form action="/admin/notifications/new" method="POST">
+                    <div class="form-group">
+                        <label class="form-label">Tiêu đề thông báo</label>
+                        <input type="text" name="title" class="form-input" placeholder="Ví dụ: Big sale 10% toàn bộ sản phẩm" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Nội dung thông báo</label>
+                        <textarea name="message" class="form-textarea" placeholder="Nhập nội dung mô tả ngắn gọn, dễ hiểu..." required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Đường dẫn ảnh</label>
+                            <input type="text" name="image" class="form-input" placeholder="/img/notify-sale.png">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Loại thông báo</label>
+                            <input type="text" name="type" class="form-input" placeholder="Ví dụ: general" value="general">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Link khi bấm vào</label>
+                        <input type="text" name="link" class="form-input" placeholder="/product/1 hoặc /cart hoặc /">
+                    </div>
+
+                    <label class="checkbox-wrap">
+                        <input type="checkbox" name="is_pinned" value="1">
+                        <span>Ghim thông báo này lên đầu danh sách</span>
+                    </label>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-plus"></i>
+                            Thêm thông báo
+                        </button>
+
+                        <a href="/admin" class="btn btn-outline">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            Quay lại dashboard
+                        </a>
+                    </div>
+                </form>
+
+                <div class="tips-box">
+                    <h4><i class="fa-solid fa-lightbulb"></i> Gợi ý</h4>
+                    <p>
+                        Bạn nên viết tiêu đề ngắn gọn, nội dung dưới 2 dòng để dropdown ngoài trang chủ hiển thị đẹp hơn.
+                        Nếu là thông báo quan trọng như khuyến mãi, bảo trì, cập nhật sản phẩm mới thì nên bật ghim.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="card">
+                <h2 class="card-title">Danh sách thông báo</h2>
+                <p class="card-subtitle">Bạn có thể ghim, bật tắt hiển thị hoặc xóa thông báo trực tiếp tại đây.</p>
+
+                <% if (!notifications || notifications.length === 0) { %>
+                    <div class="empty-box">
+                        <i class="fa-regular fa-bell" style="font-size:32px;color:#ccc;margin-bottom:10px;display:block;"></i>
+                        Chưa có thông báo nào.
+                    </div>
+                <% } else { %>
+                    <div class="table-wrap">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Ảnh</th>
+                                <th>Thông báo</th>
+                                <th>Nội dung</th>
+                                <th>Trạng thái</th>
+                                <th>Ghim</th>
+                                <th>Link</th>
+                                <th>Ngày tạo</th>
+                                <th>Thao tác</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% notifications.forEach(item => { %>
+                                <tr>
+                                    <td>
+                                        <img
+                                                src="<%= item.image && item.image.trim() ? item.image : '/legacy/source_code-byTKD/assets/img/Notification/2Update.jpeg' %>"
+                                                alt="Ảnh"
+                                                class="thumb"
+                                        >
+                                    </td>
+
+                                    <td class="title-cell">
+                                        <div class="title-main"><%= item.title %></div>
+                                        <div class="title-sub">Loại: <%= item.type || "general" %></div>
+                                    </td>
+
+                                    <td class="message-cell">
+                                        <%= item.message || "" %>
+                                    </td>
+
+                                    <td>
+                                        <% if (item.is_active) { %>
+                                            <span class="badge badge-active">Đang bật</span>
+                                        <% } else { %>
+                                            <span class="badge badge-inactive">Đang tắt</span>
+                                        <% } %>
+                                    </td>
+
+                                    <td>
+                                        <% if (item.is_pinned) { %>
+                                            <span class="badge badge-pinned">Đã ghim</span>
+                                        <% } else { %>
+                                            <span class="badge badge-normal">Bình thường</span>
+                                        <% } %>
+                                    </td>
+
+                                    <td class="link-cell">
+                                        <% if (item.link) { %>
+                                            <a href="<%= item.link %>" target="_blank"><%= item.link %></a>
+                                        <% } else { %>
+                                            <span style="color:#999;">Không có</span>
+                                        <% } %>
+                                    </td>
+
+                                    <td>
+                                        <%= item.created_at ? new Date(item.created_at).toLocaleString("vi-VN") : "-" %>
+                                    </td>
+
+                                    <td>
+                                        <div class="action-group">
+                                            <form action="/admin/notifications/pin/<%= item.id %>" method="POST">
+                                                <button type="submit" class="btn btn-warning">
+                                                    <i class="fa-solid fa-thumbtack"></i>
+                                                    <%= item.is_pinned ? "Bỏ ghim" : "Ghim" %>
+                                                </button>
+                                            </form>
+
+                                            <form action="/admin/notifications/toggle/<%= item.id %>" method="POST">
+                                                <button type="submit" class="btn btn-outline">
+                                                    <i class="fa-solid fa-power-off"></i>
+                                                    <%= item.is_active ? "Tắt" : "Bật" %>
+                                                </button>
+                                            </form>
+
+                                            <form action="/admin/notifications/delete/<%= item.id %>" method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa thông báo này?')">
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                    Xóa
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sửa sản phẩm - TKD Shop Admin</title>
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/fontawesome-free-6.6.0-web/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        .admin-page {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 16px;
+        }
+        .admin-header {
+            background: linear-gradient(135deg, #ee4d2d, #ff7337);
+            color: #fff;
+            border-radius: 14px;
+            padding: 22px 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+        .admin-header__top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .admin-title {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+        }
+        .admin-subtitle {
+            margin: 8px 0 0;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .admin-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+        .admin-btn--light {
+            background: #fff;
+            color: #ee4d2d;
+        }
+        .admin-btn--dark {
+            background: rgba(255,255,255,0.16);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+        .admin-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .admin-nav__item {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+            transition: 0.2s ease;
+        }
+        .admin-nav__item:hover {
+            transform: translateY(-2px);
+            border-color: #ee4d2d;
+        }
+        .admin-nav__item--active {
+            border-color: #ee4d2d;
+            background: #fff7f5;
+        }
+        .admin-nav__icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: #fff1ee;
+            color: #ee4d2d;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .admin-nav__title {
+            display: block;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .admin-nav__desc {
+            display: block;
+            font-size: 13px;
+            color: #777;
+        }
+        .form-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+        .form-title {
+            margin: 0 0 8px;
+            font-size: 24px;
+        }
+        .form-subtitle {
+            margin: 0 0 20px;
+            color: #777;
+            font-size: 14px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .form-group--full {
+            grid-column: 1 / -1;
+        }
+        .form-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #444;
+        }
+        .form-input {
+            width: 100%;
+            height: 44px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 0 14px;
+            font-size: 14px;
+            outline: none;
+        }
+        .form-input:focus {
+            border-color: #ee4d2d;
+            box-shadow: 0 0 0 3px rgba(238, 77, 45, 0.08);
+        }
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        .btn-secondary {
+            background: #fff;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+        .btn-primary {
+            background: #ee4d2d;
+            color: #fff;
+        }
+        @media (max-width: 900px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="admin-page">
+
+    <div class="admin-header">
+        <div class="admin-header__top">
+            <div>
+                <h1 class="admin-title">Sửa sản phẩm</h1>
+                <p class="admin-subtitle">Cập nhật thông tin sản phẩm trong hệ thống TKD Shop</p>
+            </div>
+
+            <div class="admin-actions">
+                <a href="/admin" class="admin-btn admin-btn--light">
+                    <i class="fa-solid fa-chart-line"></i>
+                    Dashboard
+                </a>
+                <a href="/admin/products" class="admin-btn admin-btn--dark">
+                    <i class="fa-solid fa-box-open"></i>
+                    Danh sách sản phẩm
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-nav">
+        <a href="/admin" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-chart-line"></i></span>
+            <span class="admin-nav__title">Dashboard</span>
+            <span class="admin-nav__desc">Xem số liệu tổng quan</span>
+        </a>
+
+        <a href="/admin/orders" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-file-invoice"></i></span>
+            <span class="admin-nav__title">Đơn hàng</span>
+            <span class="admin-nav__desc">Quản lý đơn đặt hàng</span>
+        </a>
+
+        <a href="/admin/products" class="admin-nav__item admin-nav__item--active">
+            <span class="admin-nav__icon"><i class="fa-solid fa-box-open"></i></span>
+            <span class="admin-nav__title">Sản phẩm</span>
+            <span class="admin-nav__desc">Xem danh sách sản phẩm</span>
+        </a>
+
+        <a href="/admin/products/new" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-square-plus"></i></span>
+            <span class="admin-nav__title">Thêm mới</span>
+            <span class="admin-nav__desc">Tạo sản phẩm mới</span>
+        </a>
+    </div>
+
+    <div class="form-card">
+        <h2 class="form-title">Chỉnh sửa sản phẩm</h2>
+        <p class="form-subtitle">Cập nhật đầy đủ thông tin sản phẩm.</p>
+
+        <form action="/admin/products/edit/<%= product.id %>" method="POST">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Tên sản phẩm</label>
+                    <input type="text" name="name" class="form-input" value="<%= product.name %>">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Giá gốc</label>
+                    <input type="number" name="old_price" class="form-input" value="<%= product.oldPrice || product.price %>">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Giá bán</label>
+                    <input type="number" name="price" class="form-input" value="<%= product.price %>">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Thương hiệu</label>
+                    <input type="text" name="brand" class="form-input" value="<%= product.brand || '' %>">
+                </div>
+
+                <div class="form-group form-group--full">
+                    <label class="form-label">Ảnh chính</label>
+                    <input type="text" name="image" class="form-input" value="<%= product.image || '' %>">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ảnh 2</label>
+                    <input type="text" name="image2" class="form-input" value="<%= product.image2 || '' %>">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ảnh 3</label>
+                    <input type="text" name="image3" class="form-input" value="<%= product.image3 || '' %>">
+                </div>
+
+                <div class="form-group form-group--full">
+                    <label class="form-label">Ảnh 4</label>
+                    <input type="text" name="image4" class="form-input" value="<%= product.image4 || '' %>">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Danh mục</label>
+                    <input type="text" name="category" class="form-input" value="<%= product.category || '' %>">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="/admin/products" class="admin-btn btn-secondary">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Quay lại
+                </a>
+
+                <button type="submit" class="admin-btn btn-primary">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Lưu thay đổi
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>

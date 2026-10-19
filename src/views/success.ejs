@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt hàng thành công - TKD Shop</title>
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/fontawesome-free-6.6.0-web/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(180deg, #f8f8f8 0%, #efefef 100%);
+            color: #222;
+        }
+
+        .success-page {
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .success-wrapper {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .success-card {
+            background: #fff;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .success-header {
+            padding: 34px 28px 26px;
+            background: linear-gradient(135deg, #ee4d2d, #ff7448);
+            color: #fff;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 82px;
+            height: 82px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+        }
+
+        .success-title {
+            margin: 0 0 10px;
+            font-size: 38px;
+            font-weight: 800;
+        }
+
+        .success-subtitle {
+            margin: 0;
+            font-size: 16px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .success-body {
+            padding: 28px;
+        }
+
+        .order-highlight {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .highlight-box {
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .highlight-label {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 8px;
+        }
+
+        .highlight-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #222;
+        }
+
+        .highlight-value--accent {
+            color: #ee4d2d;
+        }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .section-box {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 16px;
+            padding: 22px;
+        }
+
+        .section-title {
+            margin: 0 0 14px;
+            font-size: 21px;
+            font-weight: 800;
+            color: #222;
+        }
+
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .info-key {
+            color: #666;
+            min-width: 150px;
+        }
+
+        .info-value {
+            color: #222;
+            font-weight: 700;
+            text-align: right;
+            flex: 1;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 34px;
+            padding: 0 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #8a6d3b;
+        }
+
+        .status-unpaid {
+            background: #f3f3f3;
+            color: #666;
+        }
+
+        .status-pending-confirm {
+            background: #fff3cd;
+            color: #8a6d3b;
+        }
+
+        .status-paid {
+            background: #e9f9ef;
+            color: #1d7a3d;
+        }
+
+        .next-step-box {
+            background: #fff7f5;
+            border: 1px solid #ffd8cd;
+            border-radius: 16px;
+            padding: 20px 22px;
+            margin-bottom: 22px;
+        }
+
+        .next-step-title {
+            margin: 0 0 10px;
+            font-size: 18px;
+            font-weight: 800;
+            color: #ee4d2d;
+        }
+
+        .next-step-text {
+            margin: 0;
+            font-size: 15px;
+            color: #444;
+            line-height: 1.7;
+        }
+
+        .transfer-box {
+            background: #fffaf8;
+            border: 1px dashed #ffb39f;
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 22px;
+        }
+
+        .transfer-title {
+            margin: 0 0 14px;
+            font-size: 20px;
+            font-weight: 800;
+            color: #ee4d2d;
+        }
+
+        .transfer-grid {
+            display: grid;
+            grid-template-columns: 1fr 240px;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .transfer-qr-wrap {
+            text-align: center;
+        }
+
+        .transfer-qr {
+            width: 220px;
+            max-width: 100%;
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 14px;
+            padding: 8px;
+        }
+
+        .code-box {
+            margin-top: 12px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: #fff;
+            border: 1px solid #ffd4c7;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .code-box strong {
+            color: #ee4d2d;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 46px;
+            padding: 0 18px;
+            border: none;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #ee4d2d;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.94;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-outline:hover {
+            border-color: #ee4d2d;
+            color: #ee4d2d;
+        }
+
+        .btn-dark {
+            background: #222;
+            color: #fff;
+        }
+
+        .btn-dark:hover {
+            opacity: 0.94;
+            transform: translateY(-1px);
+        }
+
+        .footer-note {
+            margin-top: 18px;
+            font-size: 13px;
+            color: #888;
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .order-highlight,
+            .section-grid,
+            .transfer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .success-title {
+                font-size: 30px;
+            }
+
+            .highlight-value {
+                font-size: 24px;
+            }
+
+            .info-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .info-value {
+                text-align: left;
+            }
+
+            .transfer-qr-wrap {
+                text-align: left;
+            }
+        }
+
+        @media print {
+            body {
+                background: #fff;
+            }
+
+            .success-page {
+                padding: 0;
+            }
+
+            .action-row,
+            .footer-note {
+                display: none;
+            }
+
+            .success-card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="success-page">
+    <div class="success-wrapper">
+        <%
+        function formatPrice(value) {
+            return Number(value || 0).toLocaleString("vi-VN") + " đ";
+        }
+
+        function getPaymentMethodLabel(method) {
+            if (method === "bank_qr") return "Chuyển khoản QR";
+            return "Thanh toán khi nhận hàng (COD)";
+        }
+
+        function getPaymentStatusLabel(status, method) {
+            if (status === "paid") return "Đã thanh toán";
+            if (status === "pending_confirm") return "Chờ xác nhận / Chờ hệ thống đối soát";
+            if (method === "bank_qr") return "Chưa thanh toán";
+            return "Thanh toán khi nhận hàng";
+        }
+
+        function getPaymentStatusClass(status, method) {
+            if (status === "paid") return "status-paid";
+            if (status === "pending_confirm") return "status-pending-confirm";
+            if (method === "bank_qr") return "status-unpaid";
+            return "status-pending";
+        }
+
+        const paymentMethod = order.payment_method || "cod";
+        const paymentStatus = order.payment_status || "unpaid";
+        const subtotalValue = order.subtotal || order.total || 0;
+        const shippingFeeValue = order.shipping_fee || 0;
+        const discountAmountValue = order.discount_amount || 0;
+        const finalTotalValue = order.total || 0;
+        %>
+
+        <div class="success-card">
+            <div class="success-header">
+                <div class="success-icon">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h1 class="success-title">Đặt hàng thành công</h1>
+                <p class="success-subtitle">
+                    Cảm ơn bạn đã mua sắm tại TKD Shop. Đơn hàng của bạn đã được ghi nhận và đang chờ xử lý.
+                </p>
+            </div>
+
+            <div class="success-body">
+                <div class="order-highlight">
+                    <div class="highlight-box">
+                        <div class="highlight-label">Mã đơn hàng của bạn</div>
+                        <div class="highlight-value">#<%= order.id %></div>
+                    </div>
+
+                    <div class="highlight-box">
+                        <div class="highlight-label">Tổng thanh toán cuối</div>
+                        <div class="highlight-value highlight-value--accent"><%= formatPrice(finalTotalValue) %></div>
+                    </div>
+                </div>
+
+                <% if (paymentMethod === "bank_qr") { %>
+                    <div class="transfer-box">
+                        <h2 class="transfer-title">Thông tin chuyển khoản</h2>
+
+                        <div class="transfer-grid">
+                            <div>
+                                <div class="info-list">
+                                    <div class="info-row">
+                                        <span class="info-key">Ngân hàng</span>
+                                        <span class="info-value">Vietcombank</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-key">Số tài khoản</span>
+                                        <span class="info-value">1038983184</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-key">Chủ tài khoản</span>
+                                        <span class="info-value">TRAN KHANH DANG</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-key">Số tiền cần chuyển</span>
+                                        <span class="info-value"><%= formatPrice(finalTotalValue) %></span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-key">Mã chuyển khoản</span>
+                                        <span class="info-value"><%= order.transfer_code || "Chưa tạo mã" %></span>
+                                    </div>
+                                </div>
+
+                                <div class="code-box">
+                                    <div><strong>Lưu ý:</strong></div>
+                                    <div>Vui lòng chuyển đúng số tiền và đúng nội dung chuyển khoản để hệ thống tự đối soát.</div>
+                                    <div style="margin-top: 8px;">
+                                        <strong>Nội dung chuyển khoản:</strong>
+                                        <%= order.transfer_code || "Chưa có mã chuyển khoản" %>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="transfer-qr-wrap">
+                                <% if (typeof qrUrl !== "undefined" && qrUrl) { %>
+                                    <img src="<%= qrUrl %>" alt="QR thanh toán" class="transfer-qr">
+                                <% } else { %>
+                                    <img src="/legacy/source_code-byTKD/assets/img/QR.jpg" alt="QR thanh toán" class="transfer-qr">
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+
+                <div class="section-grid">
+                    <div class="section-box">
+                        <h2 class="section-title">Thông tin nhận hàng</h2>
+                        <div class="info-list">
+                            <div class="info-row">
+                                <span class="info-key">Người nhận</span>
+                                <span class="info-value"><%= order.name %></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-key">Số điện thoại</span>
+                                <span class="info-value"><%= order.phone %></span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-key">Địa chỉ</span>
+                                <span class="info-value"><%= order.address %></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-box">
+                        <h2 class="section-title">Thông tin thanh toán</h2>
+                        <div class="info-list">
+                            <div class="info-row">
+                                <span class="info-key">Phương thức</span>
+                                <span class="info-value"><%= getPaymentMethodLabel(paymentMethod) %></span>
+                            </div>
+
+                            <div class="info-row">
+                                <span class="info-key">Trạng thái</span>
+                                <span class="info-value">
+                                    <span class="status-pill <%= getPaymentStatusClass(paymentStatus, paymentMethod) %>">
+                                        <%= getPaymentStatusLabel(paymentStatus, paymentMethod) %>
+                                    </span>
+                                </span>
+                            </div>
+
+                            <div class="info-row">
+                                <span class="info-key">Tạm tính</span>
+                                <span class="info-value"><%= formatPrice(subtotalValue) %></span>
+                            </div>
+
+                            <div class="info-row">
+                                <span class="info-key">Phí vận chuyển</span>
+                                <span class="info-value"><%= formatPrice(shippingFeeValue) %></span>
+                            </div>
+
+                            <div class="info-row">
+                                <span class="info-key">Giảm giá</span>
+                                <span class="info-value">- <%= formatPrice(discountAmountValue) %></span>
+                            </div>
+
+                            <div class="info-row">
+                                <span class="info-key">Mã giảm giá</span>
+                                <span class="info-value"><%= order.voucher_code || "Không áp dụng" %></span>
+                            </div>
+
+                            <div class="info-row">
+                                <span class="info-key">Tổng thanh toán</span>
+                                <span class="info-value"><%= formatPrice(finalTotalValue) %></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="next-step-box">
+                    <h3 class="next-step-title">Bước tiếp theo</h3>
+                    <p class="next-step-text">
+                        <% if (paymentMethod === "bank_qr" && paymentStatus === "pending_confirm") { %>
+                            Hệ thống đang chờ xác nhận thanh toán chuyển khoản của bạn. Sau khi đối soát thành công, trạng thái đơn hàng sẽ tự động được cập nhật.
+                        <% } else if (paymentMethod === "bank_qr" && paymentStatus === "paid") { %>
+                            Thanh toán của bạn đã được xác nhận thành công. Đơn hàng sẽ sớm được xử lý và giao đến bạn.
+                        <% } else { %>
+                            Đơn hàng của bạn đang chờ xác nhận. Shop sẽ liên hệ hoặc cập nhật trạng thái trong mục lịch sử đơn hàng khi bắt đầu xử lý.
+                        <% } %>
+                    </p>
+                </div>
+
+                <div class="action-row">
+                    <a href="/" class="btn btn-primary">
+                        <i class="fa-solid fa-house"></i>
+                        Về trang chủ
+                    </a>
+
+                    <a href="/orders" class="btn btn-outline">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        Xem lịch sử đơn hàng
+                    </a>
+
+                    <button onclick="window.print()" class="btn btn-dark" type="button">
+                        <i class="fa-solid fa-print"></i>
+                        In đơn hàng
+                    </button>
+                </div>
+
+                <div class="footer-note">
+                    Bạn nên lưu lại mã đơn hàng để tiện theo dõi và hỗ trợ sau này.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tất cả thông báo - TKD Shop</title>
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/fontawesome-free-6.6.0-web/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .page {
+            max-width: 1180px;
+            margin: 30px auto;
+            padding: 0 16px;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #ee4d2d, #ff7337);
+            color: #fff;
+            border-radius: 18px;
+            padding: 28px 30px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+        }
+
+        .page-header__top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: 34px;
+            font-weight: 800;
+        }
+
+        .page-subtitle {
+            margin: 8px 0 0;
+            font-size: 15px;
+            opacity: 0.96;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-light {
+            background: #fff;
+            color: #ee4d2d;
+        }
+
+        .btn-light:hover {
+            opacity: 0.92;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 22px;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 30px;
+            font-weight: 800;
+            color: #222;
+        }
+
+        .stat-value.orange {
+            color: #ee4d2d;
+        }
+
+        .stat-value.green {
+            color: #11875d;
+        }
+
+        .stat-value.purple {
+            color: #6a1b9a;
+        }
+
+        .list-card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 22px;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        }
+
+        .list-title {
+            margin: 0 0 18px;
+            font-size: 24px;
+            font-weight: 800;
+            color: #222;
+        }
+
+        .notify-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .notify-item {
+            display: flex;
+            gap: 16px;
+            background: #fffaf8;
+            border: 1px solid #ffe1d8;
+            border-radius: 16px;
+            padding: 16px;
+            transition: 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .notify-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(238, 77, 45, 0.10);
+            border-color: #ffc6b5;
+        }
+
+        .notify-thumb {
+            width: 82px;
+            height: 82px;
+            border-radius: 14px;
+            object-fit: cover;
+            border: 1px solid #eee;
+            background: #fafafa;
+            flex-shrink: 0;
+        }
+
+        .notify-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notify-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .notify-name {
+            font-size: 18px;
+            font-weight: 800;
+            color: #222;
+            line-height: 1.5;
+        }
+
+        .notify-message {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .notify-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .badge-pinned {
+            background: #fff4e8;
+            color: #b26a00;
+        }
+
+        .badge-type {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .notify-date {
+            font-size: 12px;
+            color: #999;
+            font-weight: 600;
+        }
+
+        .empty-box {
+            padding: 50px 20px;
+            text-align: center;
+            color: #777;
+        }
+
+        .empty-box i {
+            font-size: 40px;
+            color: #ccc;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .empty-box h3 {
+            margin: 0 0 8px;
+            font-size: 22px;
+            color: #444;
+        }
+
+        .empty-box p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 800px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .notify-item {
+                flex-direction: column;
+            }
+
+            .notify-thumb {
+                width: 100%;
+                height: 180px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <div class="page-header">
+        <div class="page-header__top">
+            <div>
+                <h1 class="page-title">Tất cả thông báo</h1>
+                <p class="page-subtitle">
+                    Cập nhật khuyến mãi, sản phẩm mới và các thông báo quan trọng từ TKD Shop.
+                </p>
+            </div>
+
+            <a href="/" class="btn btn-light">
+                <i class="fa-solid fa-house"></i>
+                Về trang chủ
+            </a>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-label">Tổng thông báo</div>
+            <div class="stat-value orange"><%= notifications ? notifications.length : 0 %></div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Thông báo đang hiển thị</div>
+            <div class="stat-value green"><%= notifications ? notifications.length : 0 %></div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Thông báo được ghim</div>
+            <div class="stat-value purple"><%= notifications ? notifications.filter(item => item.is_pinned).length : 0 %></div>
+        </div>
+    </div>
+
+    <div class="list-card">
+        <h2 class="list-title">Danh sách thông báo</h2>
+
+        <% if (!notifications || notifications.length === 0) { %>
+            <div class="empty-box">
+                <i class="fa-regular fa-bell"></i>
+                <h3>Chưa có thông báo</h3>
+                <p>Hiện tại cửa hàng chưa đăng thông báo nào.</p>
+            </div>
+        <% } else { %>
+            <div class="notify-list">
+                <% notifications.forEach(item => { %>
+                    <a href="<%= item.link && item.link.trim() ? item.link : 'javascript:void(0)' %>" class="notify-item">
+                        <img
+                                src="<%= item.image && item.image.trim() ? item.image : '/legacy/source_code-byTKD/assets/img/Notification/2Update.jpeg' %>"
+                                alt="Ảnh thông báo"
+                                class="notify-thumb"
+                        >
+
+                        <div class="notify-content">
+                            <div class="notify-top">
+                                <div class="notify-name"><%= item.title %></div>
+                                <div class="notify-date">
+                                    <%= item.created_at ? new Date(item.created_at).toLocaleString("vi-VN") : "-" %>
+                                </div>
+                            </div>
+
+                            <div class="notify-message">
+                                <%= item.message || "" %>
+                            </div>
+
+                            <div class="notify-meta">
+                                <% if (item.is_pinned) { %>
+                                    <span class="badge badge-pinned">
+                                        <i class="fa-solid fa-thumbtack"></i>&nbsp; Ghim
+                                    </span>
+                                <% } %>
+
+                                <span class="badge badge-type">
+                                    <%= item.type || "general" %>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                <% }) %>
+            </div>
+        <% } %>
+    </div>
+
+</div>
+</body>
+</html>

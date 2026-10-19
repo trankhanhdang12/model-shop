@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trợ giúp - TKD Shop</title>
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/fontawesome-free-6.6.0-web/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .page {
+            max-width: 1180px;
+            margin: 30px auto;
+            padding: 0 16px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #ee4d2d, #ff7337);
+            color: #fff;
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+        }
+
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: 34px;
+            font-weight: 800;
+        }
+
+        .hero p {
+            margin: 10px 0 0;
+            font-size: 15px;
+            line-height: 1.7;
+            opacity: 0.96;
+        }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            background: #fff;
+            color: #ee4d2d;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 22px;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        }
+
+        .card h2 {
+            margin: 0 0 18px;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .faq-item {
+            border: 1px solid #eee;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #fffdfd;
+        }
+
+        .faq-question {
+            width: 100%;
+            border: none;
+            background: #fff;
+            text-align: left;
+            padding: 16px 18px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #222;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question:hover {
+            background: #fff7f5;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 0 18px 18px;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-icon {
+            transition: 0.2s ease;
+            color: #ee4d2d;
+        }
+
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .info-box {
+            background: #fff8f5;
+            border: 1px solid #ffd9cc;
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .info-box h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            color: #d9481c;
+        }
+
+        .info-box p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .contact-box {
+            margin-top: 18px;
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .contact-box h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .contact-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-item i {
+            color: #ee4d2d;
+            width: 18px;
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <div class="hero">
+        <div class="hero-top">
+            <div>
+                <h1>Trợ giúp</h1>
+                <p>
+                    Chào mừng bạn đến với trung tâm hỗ trợ của TKD Shop.
+                    Tại đây bạn có thể xem hướng dẫn mua hàng, thanh toán, theo dõi đơn hàng và các câu hỏi thường gặp.
+                </p>
+            </div>
+
+            <a href="/" class="btn-home">
+                <i class="fa-solid fa-house"></i>
+                Về trang chủ
+            </a>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h2>Câu hỏi thường gặp</h2>
+
+            <div class="faq-list">
+                <% helpItems.forEach((item, index) => { %>
+                    <div class="faq-item <%= index === 0 ? 'active' : '' %>">
+                        <button type="button" class="faq-question">
+                            <span><%= item.title %></span>
+                            <i class="fa-solid fa-angle-down faq-icon"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <%= item.content %>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+
+        <div>
+            <div class="card">
+                <h2>Hướng dẫn nhanh</h2>
+
+                <div class="info-list">
+                    <div class="info-box">
+                        <h3>1. Chọn sản phẩm</h3>
+                        <p>Tìm kiếm hoặc chọn sản phẩm theo danh mục Dragon Ball, One Piece, Naruto...</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h3>2. Thêm vào giỏ hàng</h3>
+                        <p>Bấm nút “Thêm vào giỏ” để lưu sản phẩm bạn muốn mua.</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h3>3. Thanh toán</h3>
+                        <p>Nhập thông tin nhận hàng, chọn phương thức thanh toán và xác nhận đơn.</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h3>4. Theo dõi đơn hàng</h3>
+                        <p>Đăng nhập và vào mục đơn hàng để xem tiến trình xử lý đơn.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-box">
+                <h3>Liên hệ hỗ trợ</h3>
+
+                <div class="contact-item">
+                    <i class="fa-brands fa-facebook"></i>
+                    <span>Facebook: Khánh Đăng</span>
+                </div>
+
+                <div class="contact-item">
+                    <i class="fa-brands fa-instagram"></i>
+                    <span>Instagram: @sach.mot.714
+</span>
+                </div>
+
+                <div class="contact-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <span>Hotline: 0886 364 33</span>
+                </div>
+
+                <div class="contact-item">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span>Email: trankhanhdang357@gmail.com</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll(".faq-question").forEach((button) => {
+        button.addEventListener("click", function () {
+            const item = this.parentElement;
+            item.classList.toggle("active");
+        });
+    });
+</script>
+</body>
+</html>

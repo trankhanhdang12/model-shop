@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - TKD Shop</title>
+
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/css/base.css">
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/css/main.css">
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/css/grid.css">
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/css/responsive.css">
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/fontawesome-free-6.6.0-web/css/all.min.css">
+
+    <style>
+        .error-message{
+            color:red;
+            font-size:13px;
+            margin-top:6px;
+            display:none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="modal" style="display:flex;">
+    <div class="modal__overlay"></div>
+
+    <div class="modal__body">
+
+        <div class="auth-from">
+
+            <div class="auth-from__container">
+
+                <div class="auth-from__header">
+                    <h3 class="auth-from__heading">Đăng ký</h3>
+
+                    <span class="auth-from__switch-btn">
+<a href="/login">Đăng nhập</a>
+</span>
+                </div>
+
+
+                <form id="registerForm" class="auth-from__from" action="/register" method="POST">
+
+                    <div class="auth-from__group">
+                        <input
+                                name="email"
+                                type="email"
+                                class="auth-from__input"
+                                placeholder="Nhập Email của bạn"
+                                required
+                        >
+                    </div>
+
+                    <div class="auth-from__group">
+                        <input
+                                name="password"
+                                type="password"
+                                class="auth-from__input"
+                                placeholder="Nhập mật khẩu của bạn"
+                                minlength="6"
+                                maxlength="32"
+                                required
+                        >
+                    </div>
+
+                    <div class="auth-from__group">
+                        <input
+                                name="confirmPassword"
+                                type="password"
+                                class="auth-from__input"
+                                placeholder="Nhập lại mật khẩu của bạn"
+                                minlength="6"
+                                maxlength="32"
+                                required
+                        >
+                    </div>
+
+                    <div id="errorText" class="error-message"></div>
+
+
+                    <div class="auth-from__aside">
+
+                        <p class="auth-from__policy-text">
+
+                            Bằng việc đăng ký, bạn đã đồng ý với
+
+                            <a href="#" class="auth-from__text-link">
+                                Điều khoản dịch vụ
+                            </a>
+
+                            &
+
+                            <a href="#" class="auth-from__text-link">
+                                Chính sách bảo mật
+                            </a>
+
+                        </p>
+
+                    </div>
+
+
+                    <div class="auth-from__controls">
+
+                        <a
+                                class="btn auth-from__controls-back btn--nomal"
+                                href="/"
+                        >
+                            TRỞ LẠI
+                        </a>
+
+                        <button
+                                type="submit"
+                                class="btn btn--primary"
+                        >
+                            ĐĂNG KÝ
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <div class="auth-from__socials">
+
+                <a href="#" class="auth-from__socials--facebook btn btn--size-s btn--with-icon">
+
+                    <i class="auth-from__socials-icon fa-brands fa-square-facebook"></i>
+
+                    <span class="auth-from__socials-title">
+Kết nối với Facebook
+</span>
+
+                </a>
+
+
+                <a href="#" class="auth-from__socials--google btn btn--size-s btn--with-icon">
+
+                    <i class="auth-from__socials-icon fa-brands fa-square-google-plus"></i>
+
+                    <span class="auth-from__socials-title">
+Kết nối với Google
+</span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+
+    const form = document.getElementById("registerForm");
+    const errorText = document.getElementById("errorText");
+
+    form.addEventListener("submit",function(e){
+
+        const email = form.email.value.trim();
+        const password = form.password.value;
+        const confirmPassword = form.confirmPassword.value;
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if(!emailRegex.test(email)){
+            e.preventDefault();
+            errorText.style.display="block";
+            errorText.innerText="Email không hợp lệ";
+            return;
+        }
+
+        if(password.length < 6){
+            e.preventDefault();
+            errorText.style.display="block";
+            errorText.innerText="Mật khẩu phải ít nhất 6 ký tự";
+            return;
+        }
+
+        if(password !== confirmPassword){
+            e.preventDefault();
+            errorText.style.display="block";
+            errorText.innerText="Mật khẩu nhập lại không khớp";
+            return;
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

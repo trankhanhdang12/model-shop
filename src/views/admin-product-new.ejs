@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm sản phẩm - TKD Shop Admin</title>
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/fontawesome-free-6.6.0-web/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .admin-page {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 16px;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, #ee4d2d, #ff7337);
+            color: #fff;
+            border-radius: 14px;
+            padding: 22px 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .admin-header__top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .admin-title {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .admin-subtitle {
+            margin: 8px 0 0;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .admin-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .admin-btn--light {
+            background: #fff;
+            color: #ee4d2d;
+        }
+
+        .admin-btn--light:hover {
+            opacity: 0.92;
+        }
+
+        .admin-btn--dark {
+            background: rgba(255,255,255,0.16);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .admin-btn--dark:hover {
+            background: rgba(255,255,255,0.24);
+        }
+
+        .admin-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .admin-nav__item {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+            transition: 0.2s ease;
+        }
+
+        .admin-nav__item:hover {
+            transform: translateY(-2px);
+            border-color: #ee4d2d;
+        }
+
+        .admin-nav__item--active {
+            border-color: #ee4d2d;
+            background: #fff7f5;
+        }
+
+        .admin-nav__icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: #fff1ee;
+            color: #ee4d2d;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .admin-nav__title {
+            display: block;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .admin-nav__desc {
+            display: block;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .form-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+
+        .form-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-title {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .form-subtitle {
+            margin: 6px 0 0;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group--full {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #444;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 44px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 0 14px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s ease;
+            background: #fff;
+        }
+
+        .form-input:focus {
+            border-color: #ee4d2d;
+            box-shadow: 0 0 0 3px rgba(238, 77, 45, 0.08);
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: #888;
+            line-height: 1.5;
+        }
+
+        .form-preview {
+            margin-top: 6px;
+            width: 120px;
+            height: 120px;
+            border: 1px dashed #ddd;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #fafafa;
+        }
+
+        .form-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .form-preview span {
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            padding: 8px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary {
+            background: #fff;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            border-color: #bbb;
+        }
+
+        .btn-primary {
+            background: #ee4d2d;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.94;
+        }
+
+        @media (max-width: 900px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="admin-page">
+
+    <div class="admin-header">
+        <div class="admin-header__top">
+            <div>
+                <h1 class="admin-title">Thêm sản phẩm</h1>
+                <p class="admin-subtitle">Tạo sản phẩm mới cho hệ thống TKD Shop</p>
+            </div>
+
+            <div class="admin-actions">
+                <a href="/admin" class="admin-btn admin-btn--light">
+                    <i class="fa-solid fa-chart-line"></i>
+                    Dashboard
+                </a>
+                <a href="/admin/products" class="admin-btn admin-btn--dark">
+                    <i class="fa-solid fa-box-open"></i>
+                    Danh sách sản phẩm
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-nav">
+        <a href="/admin" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-chart-line"></i></span>
+            <span class="admin-nav__title">Dashboard</span>
+            <span class="admin-nav__desc">Xem số liệu tổng quan</span>
+        </a>
+
+        <a href="/admin/orders" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-file-invoice"></i></span>
+            <span class="admin-nav__title">Đơn hàng</span>
+            <span class="admin-nav__desc">Quản lý đơn đặt hàng</span>
+        </a>
+
+        <a href="/admin/products" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-box-open"></i></span>
+            <span class="admin-nav__title">Sản phẩm</span>
+            <span class="admin-nav__desc">Xem danh sách sản phẩm</span>
+        </a>
+
+        <a href="/admin/products/new" class="admin-nav__item admin-nav__item--active">
+            <span class="admin-nav__icon"><i class="fa-solid fa-square-plus"></i></span>
+            <span class="admin-nav__title">Thêm mới</span>
+            <span class="admin-nav__desc">Tạo sản phẩm mới</span>
+        </a>
+    </div>
+
+    <div class="form-card">
+        <div class="form-head">
+            <div>
+                <h2 class="form-title">Thông tin sản phẩm</h2>
+                <p class="form-subtitle">Điền đầy đủ thông tin để sản phẩm hiển thị đẹp trên website.</p>
+            </div>
+        </div>
+
+        <form action="/admin/products/new" method="POST">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Tên sản phẩm</label>
+                    <input type="text" name="name" class="form-input" placeholder="Ví dụ: Gogeta Blue - Dragon Ball">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Giá gốc</label>
+                    <input type="number" id="old_price" name="old_price" class="form-input" placeholder="Ví dụ: 4200000">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Giảm giá (%)</label>
+                    <input type="number" id="discount" name="discount" class="form-input" placeholder="Ví dụ: 10">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Giá bán (tự tính)</label>
+                    <input type="number" id="price" name="price" class="form-input" readonly>
+                </div>
+
+                <div class="form-group form-group--full">
+                    <label class="form-label">Link ảnh chính</label>
+                    <input type="text" name="image" id="image-main-input" class="form-input" placeholder="/img/test1.jpg hoặc https://...">
+                    <div class="form-hint">Đây là ảnh lớn hiển thị chính trên trang sản phẩm.</div>
+                    <div class="form-preview">
+                        <img id="image-main-preview" alt="Preview ảnh chính">
+                        <span id="image-main-placeholder">Chưa có ảnh xem trước</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ảnh 2</label>
+                    <input type="text" name="image2" class="form-input" placeholder="/img/test2.jpg hoặc https://...">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ảnh 3</label>
+                    <input type="text" name="image3" class="form-input" placeholder="/img/test3.jpg hoặc https://...">
+                </div>
+
+                <div class="form-group form-group--full">
+                    <label class="form-label">Ảnh 4</label>
+                    <input type="text" name="image4" class="form-input" placeholder="/img/test4.jpg hoặc https://...">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Danh mục</label>
+                    <input type="text" name="category" class="form-input" placeholder="Ví dụ: Dragon Ball / One Piece / Naruto">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Thương hiệu</label>
+                    <input type="text" name="brand" class="form-input" placeholder="Ví dụ: LX Studio">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="/admin/" class="admin-btn btn-secondary">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Quay lại
+                </a>
+
+                <button type="submit" class="admin-btn btn-primary">
+                    <i class="fa-solid fa-plus"></i>
+                    Thêm sản phẩm
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    const mainInput = document.getElementById("image-main-input");
+    const mainPreview = document.getElementById("image-main-preview");
+    const mainPlaceholder = document.getElementById("image-main-placeholder");
+
+    mainInput.addEventListener("input", function () {
+        const value = this.value.trim();
+
+        if (!value) {
+            mainPreview.style.display = "none";
+            mainPreview.src = "";
+            mainPlaceholder.style.display = "block";
+            return;
+        }
+
+        mainPreview.src = value;
+        mainPreview.style.display = "block";
+        mainPlaceholder.style.display = "none";
+
+        mainPreview.onerror = function () {
+            mainPreview.style.display = "none";
+            mainPlaceholder.style.display = "block";
+            mainPlaceholder.textContent = "Không tải được ảnh";
+        };
+
+        mainPreview.onload = function () {
+            mainPlaceholder.style.display = "none";
+            mainPreview.style.display = "block";
+        };
+    });
+    const oldPrice = document.getElementById("old_price");
+    const discount = document.getElementById("discount");
+    const price = document.getElementById("price");
+
+    function calcPrice() {
+
+        const goc = Number(oldPrice.value) || 0;
+        const giam = Number(discount.value) || 0;
+
+        const result = goc - (goc * giam / 100);
+
+        price.value = Math.round(result);
+
+    }
+
+    oldPrice.addEventListener("input", calcPrice);
+    discount.addEventListener("input", calcPrice);
+</script>
+</body>
+</html>

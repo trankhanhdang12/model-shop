@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - TKD Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(180deg, #f7f7f7 0%, #efefef 100%);
+            color: #222;
+        }
+
+        .profile-page {
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .profile-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .profile-header {
+            margin-bottom: 24px;
+        }
+
+        .profile-header h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .profile-header p {
+            margin: 8px 0 0;
+            color: #666;
+            font-size: 15px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+        }
+
+        .profile-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+            padding: 24px;
+        }
+
+        .profile-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .avatar-box {
+            text-align: center;
+        }
+
+        .avatar-circle {
+            width: 96px;
+            height: 96px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            background: #ff5a3c;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            font-weight: 700;
+            box-shadow: 0 8px 18px rgba(255, 90, 60, 0.25);
+        }
+
+        .avatar-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .avatar-role {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: #f2f2f2;
+            color: #555;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 8px;
+        }
+
+        .info-item {
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: #f8f8f8;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .info-value {
+            font-size: 15px;
+            color: #222;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .main-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .section-title {
+            margin: 0 0 18px;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .alert {
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background: #e9f9ef;
+            color: #1d7a3d;
+            border: 1px solid #bde7c9;
+        }
+
+        .alert-error {
+            background: #fff0f0;
+            color: #c62828;
+            border: 1px solid #f3c1c1;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 13px 14px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s ease;
+            background: #fff;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #ff5a3c;
+            box-shadow: 0 0 0 4px rgba(255, 90, 60, 0.12);
+        }
+
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+            padding: 0 18px;
+            border: none;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #ff5a3c;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        .btn-dark {
+            background: #222;
+            color: #fff;
+        }
+
+        .btn-dark:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-outline:hover {
+            border-color: #ff5a3c;
+            color: #ff5a3c;
+        }
+
+        .divider {
+            height: 1px;
+            background: #eee;
+            margin: 24px 0;
+        }
+
+        .logout-form {
+            margin: 0;
+        }
+
+        @media (max-width: 900px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="profile-page">
+    <div class="profile-wrapper">
+        <div class="profile-header">
+            <h1>Tài khoản của tôi</h1>
+            <p>Quản lý thông tin cá nhân, địa chỉ và bảo mật tài khoản của bạn.</p>
+        </div>
+
+        <div class="profile-grid">
+            <div class="profile-sidebar">
+                <div class="profile-card avatar-box">
+                    <div class="avatar-circle">
+                        <%= (profileUser.email || "U").charAt(0).toUpperCase() %>
+                    </div>
+
+                    <div class="avatar-name">
+                        <%= profileUser.full_name || profileUser.email.split("@")[0] %>
+                    </div>
+
+                    <div class="avatar-role">
+                        <%= profileUser.role %>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <div class="section-title" style="font-size: 18px; margin-bottom: 14px;">Thông tin nhanh</div>
+
+                    <div class="info-list">
+                        <div class="info-item">
+                            <div class="info-label">ID tài khoản</div>
+                            <div class="info-value"><%= profileUser.id %></div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Email</div>
+                            <div class="info-value"><%= profileUser.email %></div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Số điện thoại</div>
+                            <div class="info-value"><%= profileUser.phone || "Chưa cập nhật" %></div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Địa chỉ</div>
+                            <div class="info-value"><%= profileUser.address || "Chưa cập nhật" %></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-section">
+                <div class="profile-card">
+                    <h2 class="section-title">Cập nhật thông tin cá nhân</h2>
+
+                    <% if (success) { %>
+                        <div class="alert alert-success"><%= success %></div>
+                    <% } %>
+
+                    <% if (error) { %>
+                        <div class="alert alert-error"><%= error %></div>
+                    <% } %>
+
+                    <form action="/profile/update" method="POST">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="full_name">Họ và tên</label>
+                                <input
+                                        type="text"
+                                        id="full_name"
+                                        name="full_name"
+                                        placeholder="Nhập họ và tên"
+                                        value="<%= profileUser.full_name || "" %>"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone">Số điện thoại</label>
+                                <input
+                                        type="text"
+                                        id="phone"
+                                        name="phone"
+                                        placeholder="Nhập số điện thoại"
+                                        value="<%= profileUser.phone || "" %>"
+                                >
+                            </div>
+
+                            <div class="form-group full">
+                                <label for="address">Địa chỉ</label>
+                                <textarea
+                                        id="address"
+                                        name="address"
+                                        placeholder="Nhập địa chỉ nhận hàng"
+                                ><%= profileUser.address || "" %></textarea>
+                            </div>
+                        </div>
+
+                        <div class="btn-row">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                Lưu thông tin
+                            </button>
+
+                            <a href="/orders" class="btn btn-dark">
+                                <i class="fa-solid fa-bag-shopping"></i>
+                                Đơn hàng của tôi
+                            </a>
+
+                            <a href="/" class="btn btn-outline">
+                                <i class="fa-solid fa-house"></i>
+                                Về trang chủ
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="profile-card">
+                    <h2 class="section-title">Đổi mật khẩu</h2>
+
+                    <form action="/profile/change-password" method="POST">
+                        <div class="form-grid">
+                            <div class="form-group full">
+                                <label for="currentPassword">Mật khẩu hiện tại</label>
+                                <input
+                                        type="password"
+                                        id="currentPassword"
+                                        name="currentPassword"
+                                        placeholder="Nhập mật khẩu hiện tại"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="newPassword">Mật khẩu mới</label>
+                                <input
+                                        type="password"
+                                        id="newPassword"
+                                        name="newPassword"
+                                        placeholder="Nhập mật khẩu mới"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmNewPassword">Nhập lại mật khẩu mới</label>
+                                <input
+                                        type="password"
+                                        id="confirmNewPassword"
+                                        name="confirmNewPassword"
+                                        placeholder="Nhập lại mật khẩu mới"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="btn-row">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa-solid fa-key"></i>
+                                Đổi mật khẩu
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="divider"></div>
+
+                    <h2 class="section-title" style="font-size: 20px;">Đăng xuất tài khoản</h2>
+
+                    <form action="/logout" method="POST" class="logout-form">
+                        <button type="submit" class="btn btn-dark">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            Đăng xuất
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

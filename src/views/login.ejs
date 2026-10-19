@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - TKD Shop</title>
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/css/base.css">
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/css/main.css">
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/css/grid.css">
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/css/responsive.css">
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/fontawesome-free-6.6.0-web/css/all.min.css">
+</head>
+<body>
+<div class="modal" style="display:flex;">
+    <div class="modal__overlay"></div>
+    <div class="modal__body">
+        <div class="auth-from">
+            <div class="auth-from__container">
+                <div class="auth-from__header">
+                    <h3 class="auth-from__heading">Đăng nhập</h3>
+                    <span class="auth-from__switch-btn">
+            <a href="/register">Đăng ký</a>
+          </span>
+                </div>
+
+                <form class="auth-from__from" action="/login" method="POST">
+                    <div class="auth-from__group">
+                        <input name="email" type="text" class="auth-from__input" placeholder="Nhập Email của bạn">
+                    </div>
+                    <div class="auth-from__group">
+                        <input name="password" type="password" class="auth-from__input" placeholder="Nhập mật khẩu của bạn">
+                    </div>
+
+                    <div class="auth-from__aside">
+                        <div class="auth-from__help">
+                            <a href="#" class="auth-from__help-link auth-from__help-forgot">Quên mật khẩu</a>
+                            <span class="auth-from__help-separate"></span>
+                            <a href="#" class="auth-from__help-link">Cần trợ giúp?</a>
+                        </div>
+                    </div>
+
+                    <div class="auth-from__controls">
+                        <a class="btn auth-from__controls-back btn--nomal" href="/">TRỞ LẠI</a>
+                        <button type="submit" class="btn btn--primary">ĐĂNG NHẬP</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="auth-from__socials">
+                <a href="#" class="auth-from__socials--facebook btn btn--size-s btn--with-icon">
+                    <i class="auth-from__socials-icon fa-brands fa-square-facebook"></i>
+                    <span class="auth-from__socials-title">Kết nối với Facebook</span>
+                </a>
+                <a href="#" class="auth-from__socials--google btn btn--size-s btn--with-icon">
+                    <i class="auth-from__socials-icon fa-brands fa-square-google-plus"></i>
+                    <span class="auth-from__socials-title">Kết nối với Google</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

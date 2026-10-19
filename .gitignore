@@ -1,0 +1,10 @@
+node_modules/
+.idea/
+.DS_Store
+.env
+.env.*
+!.env.example
+*.log
+coverage/
+.nyc_output/
+/src/public/legacy/source_code-byTKD/

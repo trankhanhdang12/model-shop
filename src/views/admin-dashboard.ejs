@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - TKD Shop</title>
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/fontawesome-free-6.6.0-web/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .admin-page {
+            max-width: 1280px;
+            margin: 30px auto;
+            padding: 0 16px;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, #ee4d2d, #ff7337);
+            color: #fff;
+            border-radius: 16px;
+            padding: 24px 26px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+        }
+
+        .admin-header__top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .admin-title {
+            margin: 0;
+            font-size: 34px;
+            font-weight: 800;
+        }
+
+        .admin-subtitle {
+            margin: 8px 0 0;
+            font-size: 14px;
+            opacity: 0.96;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .admin-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            padding: 11px 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .admin-btn--light {
+            background: #fff;
+            color: #ee4d2d;
+        }
+
+        .admin-btn--light:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        .admin-btn--dark {
+            background: rgba(255,255,255,0.16);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .admin-btn--dark:hover {
+            background: rgba(255,255,255,0.24);
+            transform: translateY(-1px);
+        }
+
+        .admin-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .admin-nav__item {
+            background: #fff;
+            border-radius: 14px;
+            padding: 18px;
+            text-decoration: none;
+            color: #333;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+            transition: 0.2s ease;
+        }
+
+        .admin-nav__item:hover {
+            transform: translateY(-2px);
+            border-color: #ee4d2d;
+        }
+
+        .admin-nav__icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: #fff1ee;
+            color: #ee4d2d;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .admin-nav__title {
+            display: block;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .admin-nav__desc {
+            display: block;
+            font-size: 13px;
+            color: #777;
+            line-height: 1.5;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+
+        .stat-card__label {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .stat-card__value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #222;
+            line-height: 1.2;
+        }
+
+        .stat-card--revenue .stat-card__value {
+            color: #00a86b;
+        }
+
+        .stat-card--orders .stat-card__value {
+            color: #ee4d2d;
+        }
+
+        .stat-card--users .stat-card__value {
+            color: #1565c0;
+        }
+
+        .stat-card--quick .stat-card__value {
+            color: #6a1b9a;
+        }
+
+        .admin-section {
+            background: #fff;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eee;
+        }
+
+        .admin-section__head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .admin-section__title {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .admin-link {
+            color: #ee4d2d;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .admin-link:hover {
+            text-decoration: underline;
+        }
+
+        .admin-table-wrap {
+            overflow-x: auto;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 860px;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 13px 14px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .admin-table th {
+            background: #fff7f5;
+            color: #444;
+            font-weight: 700;
+        }
+
+        .admin-table tr:hover td {
+            background: #fffdfd;
+        }
+
+        .admin-empty {
+            padding: 18px 0 6px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        .order-id {
+            font-weight: 700;
+            color: #222;
+        }
+
+        .order-date {
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .amount {
+            font-weight: 700;
+            color: #ee4d2d;
+        }
+
+        .quick-actions {
+            margin-top: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .quick-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+        }
+
+        .quick-card h3 {
+            margin: 0 0 10px;
+            font-size: 17px;
+        }
+
+        .quick-card p {
+            margin: 0 0 14px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .quick-card a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #ee4d2d;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        @media (max-width: 960px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="admin-page">
+
+    <div class="admin-header">
+        <div class="admin-header__top">
+            <div>
+                <h1 class="admin-title">Admin Dashboard</h1>
+                <p class="admin-subtitle">Quản lý tổng quan hệ thống TKD Shop</p>
+            </div>
+
+            <div class="admin-actions">
+                <a href="/" class="admin-btn admin-btn--light">
+                    <i class="fa-solid fa-house"></i>
+                    Về trang chủ
+                </a>
+
+                <a href="/admin/products/new" class="admin-btn admin-btn--dark">
+                    <i class="fa-solid fa-plus"></i>
+                    Thêm sản phẩm
+                </a>
+
+                <a href="/admin/notifications" class="admin-btn admin-btn--dark">
+                    <i class="fa-solid fa-bell"></i>
+                    Quản lý thông báo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-nav">
+        <a href="/admin" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-chart-line"></i></span>
+            <span class="admin-nav__title">Dashboard</span>
+            <span class="admin-nav__desc">Xem số liệu tổng quan</span>
+        </a>
+
+        <a href="/admin/orders" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-file-invoice"></i></span>
+            <span class="admin-nav__title">Đơn hàng</span>
+            <span class="admin-nav__desc">Quản lý đơn đặt hàng</span>
+        </a>
+
+        <a href="/admin/products" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-box-open"></i></span>
+            <span class="admin-nav__title">Sản phẩm</span>
+            <span class="admin-nav__desc">Xem danh sách sản phẩm</span>
+        </a>
+
+        <a href="/admin/products/new" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-square-plus"></i></span>
+            <span class="admin-nav__title">Thêm mới</span>
+            <span class="admin-nav__desc">Tạo sản phẩm mới</span>
+        </a>
+
+        <a href="/admin/users" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-users"></i></span>
+            <span class="admin-nav__title">Tài khoản</span>
+            <span class="admin-nav__desc">Xem user, mật khẩu và xóa tài khoản</span>
+        </a>
+
+        <a href="/admin/notifications" class="admin-nav__item">
+            <span class="admin-nav__icon"><i class="fa-solid fa-bell"></i></span>
+            <span class="admin-nav__title">Thông báo</span>
+            <span class="admin-nav__desc">Thêm, ghim, bật tắt và xóa thông báo</span>
+        </a>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card stat-card--orders">
+            <div class="stat-card__label">Tổng đơn hàng</div>
+            <div class="stat-card__value"><%= totalOrders || 0 %></div>
+        </div>
+
+        <div class="stat-card stat-card--revenue">
+            <div class="stat-card__label">Doanh thu</div>
+            <div class="stat-card__value"><%= Number(revenue || 0).toLocaleString("vi-VN") %> đ</div>
+        </div>
+
+        <div class="stat-card stat-card--users">
+            <div class="stat-card__label">Người dùng</div>
+            <div class="stat-card__value"><%= users && users.length ? users.length : 0 %></div>
+        </div>
+
+        <div class="stat-card stat-card--quick">
+            <div class="stat-card__label">Truy cập nhanh</div>
+            <div class="stat-card__value">Admin</div>
+        </div>
+    </div>
+
+    <div class="admin-section">
+        <div class="admin-section__head">
+            <h2 class="admin-section__title">Đơn hàng gần đây</h2>
+            <a href="/admin/orders" class="admin-link">Xem tất cả</a>
+        </div>
+
+        <% if (!orders || orders.length === 0) { %>
+            <div class="admin-empty">Chưa có đơn hàng nào.</div>
+        <% } else { %>
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                    <tr>
+                        <th>Mã đơn</th>
+                        <th>Khách hàng</th>
+                        <th>SĐT</th>
+                        <th>Địa chỉ</th>
+                        <th>Thời gian đặt</th>
+                        <th>Tổng tiền</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% orders.forEach(order => { %>
+                        <tr>
+                            <td>
+                                <div class="order-id">#<%= order.id %></div>
+                            </td>
+                            <td><%= order.name || order.user_email || "Khách lẻ" %></td>
+                            <td><%= order.phone || "-" %></td>
+                            <td><%= order.address || "-" %></td>
+                            <td>
+                                <div class="order-date">
+                                    <%= order.created_at ? new Date(order.created_at).toLocaleString("vi-VN") : "-" %>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="amount"><%= Number(order.total || 0).toLocaleString("vi-VN") %> đ</span>
+                            </td>
+                        </tr>
+                    <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+
+    <div class="quick-actions">
+        <div class="quick-card">
+            <h3>Quản lý đơn hàng</h3>
+            <p>Xem đơn mới, cập nhật trạng thái giao hàng và xác nhận thanh toán QR.</p>
+            <a href="/admin/orders">
+                <i class="fa-solid fa-arrow-right"></i>
+                Đi tới quản lý đơn hàng
+            </a>
+        </div>
+
+        <div class="quick-card">
+            <h3>Quản lý sản phẩm</h3>
+            <p>Thêm sản phẩm mới, chỉnh sửa giá, giảm giá và hình ảnh sản phẩm.</p>
+            <a href="/admin/products">
+                <i class="fa-solid fa-arrow-right"></i>
+                Đi tới quản lý sản phẩm
+            </a>
+        </div>
+
+        <div class="quick-card">
+            <h3>Quản lý tài khoản</h3>
+            <p>Xem danh sách user, thông tin đăng nhập và xóa tài khoản khi cần.</p>
+            <a href="/admin/users">
+                <i class="fa-solid fa-arrow-right"></i>
+                Đi tới quản lý tài khoản
+            </a>
+        </div>
+
+        <div class="quick-card">
+            <h3>Quản lý thông báo</h3>
+            <p>Tạo thông báo mới cho người dùng, ghim thông báo quan trọng và bật tắt hiển thị ngoài trang chủ.</p>
+            <a href="/admin/notifications">
+                <i class="fa-solid fa-arrow-right"></i>
+                Đi tới quản lý thông báo
+            </a>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8"/>
+    <title>Quản lý đơn hàng</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background:#f5f5f5;
+            margin:0;
+        }
+
+        .wrap{
+            max-width: 1600px;
+            margin: 30px auto;
+            padding: 0 16px;
+        }
+
+        .box{
+            background:#fff;
+            border-radius:16px;
+            padding:24px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+        }
+
+        .topbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:20px;
+            gap:12px;
+            flex-wrap:wrap;
+        }
+
+        .title{
+            margin:0;
+            font-size:34px;
+            font-weight:800;
+            color:#222;
+        }
+
+        .btn{
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            gap:8px;
+            padding:10px 18px;
+            border-radius:10px;
+            border:none;
+            cursor:pointer;
+            text-decoration:none;
+            font-weight:700;
+            font-size:14px;
+        }
+
+        .btn-back{
+            background:#ee4d2d;
+            color:#fff;
+        }
+
+        .btn-back:hover{
+            background:#d84324;
+        }
+
+        .stats{
+            display:grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap:16px;
+            margin-bottom:22px;
+        }
+
+        .stat-card{
+            background:#fafafa;
+            border:1px solid #eee;
+            border-radius:14px;
+            padding:18px;
+        }
+
+        .stat-label{
+            color:#666;
+            font-size:14px;
+            margin-bottom:8px;
+        }
+
+        .stat-value{
+            font-size:28px;
+            font-weight:800;
+            color:#222;
+        }
+
+        .filters{
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+            margin-bottom:20px;
+        }
+
+        .filters form{
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+            width:100%;
+        }
+
+        .filters input,
+        .filters select{
+            height:42px;
+            border:1px solid #ddd;
+            border-radius:10px;
+            padding:0 12px;
+            font-size:14px;
+            outline:none;
+            background:#fff;
+        }
+
+        .btn-filter{
+            background:#ee4d2d;
+            color:#fff;
+        }
+
+        .btn-reset{
+            background:#f3f3f3;
+            color:#333;
+        }
+
+        .message{
+            padding:12px 14px;
+            border-radius:10px;
+            margin-bottom:16px;
+            font-size:14px;
+            font-weight:600;
+        }
+
+        .message-success{
+            background:#e9f8ee;
+            color:#1f7a3f;
+        }
+
+        .message-error{
+            background:#ffeaea;
+            color:#c62828;
+        }
+
+        .table-wrap{
+            width:100%;
+            overflow-x:hidden;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            table-layout:fixed;
+        }
+
+        thead th{
+            background:#ee4d2d;
+            color:#fff;
+            text-align:left;
+            padding:14px 12px;
+            font-size:15px;
+            white-space:nowrap;
+        }
+
+        tbody td{
+            padding:12px 12px;
+            border-bottom:1px solid #eee;
+            vertical-align:top;
+            font-size:14px;
+            color:#333;
+            word-wrap:break-word;
+        }
+        .order-meta{
+            display:flex;
+            flex-direction:column;
+            gap:6px;
+            line-height:1.35;
+        }
+
+        .order-id{
+            display:inline-block;
+            width:fit-content;
+            font-weight:800;
+            font-size:15px;
+            color:#ee4d2d;
+            background:#fff1ec;
+            padding:4px 10px;
+            border-radius:999px;
+            line-height:1.2;
+        }
+
+        .order-name{
+            font-weight:700;
+            font-size:15px;
+            color:#333;
+            line-height:1.35;
+        }
+
+        .order-email{
+            color:#666;
+            font-size:13px;
+            line-height:1.35;
+            word-break:break-word;
+        }
+
+        .order-time{
+            color:#777;
+            font-size:13px;
+            margin-top:2px;
+            line-height:1.35;
+        }
+
+        .contact-meta{
+            line-height:1.55;
+            color:#333;
+        }
+
+        .items-list{
+            width:100%;
+        }
+
+        .item{
+            display:flex;
+            gap:10px;
+            align-items:flex-start;
+            background:#fafafa;
+            border:1px solid #eee;
+            border-radius:12px;
+            padding:10px;
+            width:100%;
+            box-sizing:border-box;
+        }
+
+        .item img{
+            width:54px;
+            height:54px;
+            object-fit:cover;
+            border-radius:8px;
+            background:#fff;
+            border:1px solid #eee;
+            flex-shrink:0;
+        }
+
+        .item-name{
+            font-weight:700;
+            margin-bottom:4px;
+            line-height:1.3;
+        }
+
+        .item-meta{
+            font-size:13px;
+            color:#666;
+        }
+
+        .status-badge,
+        .payment-badge{
+            display:inline-block;
+            padding:6px 12px;
+            border-radius:999px;
+            font-size:12px;
+            font-weight:700;
+            line-height:1.4;
+        }
+
+        .status-pending{ background:#fff5d6; color:#9a6b00; }
+        .status-confirmed{ background:#e8f2ff; color:#2251a3; }
+        .status-shipping{ background:#e8f7ff; color:#0b6fa4; }
+        .status-completed{ background:#e9f8ee; color:#1f7a3f; }
+        .status-cancelled{ background:#ffeaea; color:#c62828; }
+
+        .payment-unpaid{ background:#f3f3f3; color:#555; }
+        .payment-pending_confirm{ background:#fff5d6; color:#9a6b00; }
+        .payment-paid{ background:#e9f8ee; color:#1f7a3f; }
+
+        .action-col{
+            min-width:0;
+        }
+
+        .action-stack{
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+        }
+
+        .action-stack form{
+            margin:0;
+        }
+
+        .action-stack select{
+            width:100%;
+            height:40px;
+            border:1px solid #ddd;
+            border-radius:10px;
+            padding:0 10px;
+            font-size:14px;
+            background:#fff;
+        }
+
+        .btn-small{
+            width:100%;
+            height:38px;
+            border-radius:10px;
+            border:none;
+            cursor:pointer;
+            font-weight:700;
+            font-size:14px;
+        }
+
+        .btn-update{
+            background:#ee4d2d;
+            color:#fff;
+        }
+
+        .btn-confirm{
+            background:#1f7a3f;
+            color:#fff;
+        }
+
+        .btn-delete{
+            background:#fbe6e6;
+            color:#c62828;
+        }
+
+        @media (max-width: 1100px){
+            .table-wrap{
+                overflow-x:auto;
+            }
+
+            table{
+                min-width:1100px;
+            }
+        }
+
+        @media (max-width: 900px){
+            .stats{
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px){
+            .stats{
+                grid-template-columns: 1fr;
+            }
+
+            .title{
+                font-size:28px;
+            }
+        }
+        .contact-meta{
+            line-height:1.5;
+        }
+
+        .contact-meta b{
+            font-size:15px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="box">
+        <div class="topbar">
+            <h1 class="title">Quản lý đơn hàng</h1>
+            <a href="/admin" class="btn btn-back">← Dashboard</a>
+        </div>
+
+        <% if (success) { %>
+            <div class="message message-success"><%= success %></div>
+        <% } %>
+
+        <% if (error) { %>
+            <div class="message message-error"><%= error %></div>
+        <% } %>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-label">Tổng đơn</div>
+                <div class="stat-value"><%= stats.total || 0 %></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Chờ xác nhận</div>
+                <div class="stat-value"><%= stats.pending || 0 %></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Đang giao</div>
+                <div class="stat-value"><%= stats.shipping || 0 %></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Doanh thu</div>
+                <div class="stat-value"><%= Number(stats.revenue || 0).toLocaleString("vi-VN") %> đ</div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <form action="/admin/orders" method="GET">
+                <input
+                        type="text"
+                        name="order_id"
+                        placeholder="Tìm theo mã đơn"
+                        value="<%= filters?.order_id || '' %>"
+                >
+
+                <select name="status">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="pending" <%= filters?.status === 'pending' ? 'selected' : '' %>>Chờ xác nhận</option>
+                    <option value="confirmed" <%= filters?.status === 'confirmed' ? 'selected' : '' %>>Đã xác nhận</option>
+                    <option value="shipping" <%= filters?.status === 'shipping' ? 'selected' : '' %>>Đang giao</option>
+                    <option value="completed" <%= filters?.status === 'completed' ? 'selected' : '' %>>Hoàn thành</option>
+                    <option value="cancelled" <%= filters?.status === 'cancelled' ? 'selected' : '' %>>Đã hủy</option>
+                </select>
+
+                <button type="submit" class="btn btn-filter">Lọc</button>
+                <a href="/admin/orders" class="btn btn-reset">Xóa lọc</a>
+            </form>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th style="width: 14%;">Đơn hàng</th>
+                    <th style="width: 14%;">Liên hệ</th>
+                    <th style="width: 30%;">Sản phẩm</th>
+                    <th style="width: 10%;">Tổng tiền</th>
+                    <th style="width: 18%;">Thanh toán</th>
+                    <th style="width: 9%;">Trạng thái</th>
+                    <th style="width: 15%;">Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% if (!orders || orders.length === 0) { %>
+                    <tr>
+                        <td colspan="7">Chưa có đơn hàng nào.</td>
+                    </tr>
+                <% } %>
+
+                <% orders.forEach(order => { %>
+                    <tr>
+                        <td>
+                            <div class="order-meta">
+                                <div class="order-id">Mã đơn #<%= order.id %></div>
+
+                                <% if (order.created_at) { %>
+                                    <div class="order-time">
+                                        <%= new Date(order.created_at).toLocaleString("vi-VN", {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                            day: "2-digit",
+                                            month: "2-digit",
+                                            year: "numeric"
+                                        }) %>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="contact-meta">
+                                <div style="font-weight:700; margin-bottom:4px;">
+                                    <%= order.name || '-' %>
+                                </div>
+
+                                <% if(order.user_email){ %>
+                                    <div style="font-size:13px;color:#777;margin-bottom:6px;">
+                                        <%= order.user_email %>
+                                    </div>
+                                <% } %>
+
+                                <div>SĐT: <%= order.phone || '-' %></div>
+                                <div>ĐC: <%= order.address || '-' %></div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="items-list">
+                                <% (order.items || []).forEach(item => { %>
+                                    <div class="item">
+                                        <img src="<%= item.image || '' %>" alt="">
+                                        <div>
+                                            <div class="item-name"><%= item.name || '' %></div>
+                                            <div class="item-meta">
+                                                SL: <%= item.qty || 0 %> · Giá: <%= Number(item.price || 0).toLocaleString("vi-VN") %> đ
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% }) %>
+                            </div>
+                        </td>
+
+                        <td>
+                            <b><%= Number(order.total || 0).toLocaleString("vi-VN") %> đ</b>
+                        </td>
+
+                        <td>
+                            <div style="display:flex; flex-direction:column; gap:8px;">
+                                <span class="payment-badge payment-<%= order.payment_status || 'unpaid' %>">
+                                    <%= order.payment_method === "bank_qr" ? "Chuyển khoản QR"
+                                            : order.payment_method === "cod" ? "Thanh toán khi nhận hàng"
+                                                    : (order.payment_method || "Không rõ") %>
+                                    -
+                                    <%= order.payment_status === "unpaid" ? "Chưa thanh toán"
+                                            : order.payment_status === "pending_confirm" ? "Chờ xác nhận"
+                                                    : order.payment_status === "paid" ? "Đã thanh toán"
+                                                            : (order.payment_status || "Không rõ") %>
+                                </span>
+
+                                <% if (order.payment_status === "pending_confirm") { %>
+                                    <form action="/admin/orders/confirm-payment/<%= order.id %>" method="POST">
+                                        <button class="btn-small btn-confirm" type="submit">
+                                            Xác nhận thanh toán
+                                        </button>
+                                    </form>
+                                <% } %>
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="status-badge status-<%= order.status || 'pending' %>">
+                                <%= order.status === "pending" ? "Chờ xác nhận"
+                                        : order.status === "confirmed" ? "Đã xác nhận"
+                                                : order.status === "shipping" ? "Đang giao"
+                                                        : order.status === "completed" ? "Hoàn thành"
+                                                                : order.status === "cancelled" ? "Đã hủy"
+                                                                        : order.status %>
+                            </span>
+                        </td>
+
+                        <td class="action-col">
+                            <div class="action-stack">
+                                <form action="/admin/orders/update-status/<%= order.id %>" method="POST">
+                                    <select name="status">
+                                        <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Chờ xác nhận</option>
+                                        <option value="confirmed" <%= order.status === 'confirmed' ? 'selected' : '' %>>Đã xác nhận</option>
+                                        <option value="shipping" <%= order.status === 'shipping' ? 'selected' : '' %>>Đang giao</option>
+                                        <option value="completed" <%= order.status === 'completed' ? 'selected' : '' %>>Hoàn thành</option>
+                                        <option value="cancelled" <%= order.status === 'cancelled' ? 'selected' : '' %>>Đã hủy</option>
+                                    </select>
+                                    <button class="btn-small btn-update" type="submit" style="margin-top:8px;">
+                                        Cập nhật
+                                    </button>
+                                </form>
+
+                                <form action="/admin/orders/delete/<%= order.id %>" method="POST" onsubmit="return confirm('Bạn chắc chắn muốn xóa đơn hàng này?')">
+                                    <button class="btn-small btn-delete" type="submit">
+                                        Xóa đơn
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

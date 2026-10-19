@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch sử đơn hàng - TKD Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(180deg, #f8f8f8 0%, #efefef 100%);
+            color: #222;
+        }
+
+        .orders-page {
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .orders-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .orders-header {
+            margin-bottom: 24px;
+        }
+
+        .orders-header h1 {
+            margin: 0 0 8px;
+            font-size: 34px;
+            font-weight: 700;
+        }
+
+        .orders-header p {
+            margin: 0;
+            color: #666;
+            font-size: 15px;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 24px 0 30px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 0 18px;
+            border: none;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #ff5a3c;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        .btn-dark {
+            background: #222;
+            color: #fff;
+        }
+
+        .btn-dark:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-outline:hover {
+            border-color: #ff5a3c;
+            color: #ff5a3c;
+        }
+
+        .empty-box {
+            background: #fff;
+            border-radius: 18px;
+            padding: 48px 24px;
+            text-align: center;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty-box i {
+            font-size: 54px;
+            color: #ff5a3c;
+            margin-bottom: 14px;
+        }
+
+        .empty-box h2 {
+            margin: 0 0 10px;
+            font-size: 24px;
+        }
+
+        .empty-box p {
+            margin: 0 0 22px;
+            color: #666;
+        }
+
+        .order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .order-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .order-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 24px;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+        }
+
+        .order-code {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .order-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .head-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .status-badge,
+        .payment-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 34px;
+            padding: 0 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #8a6d3b;
+        }
+
+        .status-confirmed {
+            background: #d9ecff;
+            color: #1565c0;
+        }
+
+        .status-shipping {
+            background: #e8ddff;
+            color: #6a1b9a;
+        }
+
+        .status-completed {
+            background: #e6f7ec;
+            color: #1b7f46;
+        }
+
+        .status-cancelled {
+            background: #ffe3e3;
+            color: #c62828;
+        }
+
+        .payment-unpaid {
+            background: #f3f3f3;
+            color: #666;
+        }
+
+        .payment-pending-confirm {
+            background: #fff3cd;
+            color: #8a6d3b;
+        }
+
+        .payment-paid {
+            background: #e6f7ec;
+            color: #1b7f46;
+        }
+
+        .order-body {
+            padding: 24px;
+        }
+
+        .order-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+        }
+
+        .info-box,
+        .items-box {
+            background: #fafafa;
+            border-radius: 14px;
+            padding: 18px;
+        }
+
+        .section-title {
+            margin: 0 0 14px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .info-row {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .info-row strong {
+            color: #111;
+        }
+
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .product-item {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            background: #fff;
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid #eee;
+        }
+
+        .product-image {
+            width: 72px;
+            height: 72px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: #f0f0f0;
+            flex-shrink: 0;
+        }
+
+        .product-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .product-name {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .product-meta {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .order-footer {
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .order-total {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ff5a3c;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .cancel-form {
+            margin: 0;
+        }
+
+        .timeline-box {
+            margin-top: 18px;
+            background: #fff;
+            border: 1px dashed #ddd;
+            border-radius: 12px;
+            padding: 14px 16px;
+        }
+
+        .timeline-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .timeline-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 900px) {
+            .order-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .order-head {
+                align-items: flex-start;
+            }
+
+            .head-right {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="orders-page">
+    <div class="orders-wrapper">
+        <div class="orders-header">
+            <h1>Lịch sử đơn hàng</h1>
+            <p>Theo dõi trạng thái các đơn hàng bạn đã đặt tại TKD Shop.</p>
+        </div>
+
+        <div class="top-actions">
+            <a href="/profile" class="btn btn-outline">
+                <i class="fa-solid fa-user"></i>
+                Tài khoản của tôi
+            </a>
+
+            <a href="/" class="btn btn-primary">
+                <i class="fa-solid fa-house"></i>
+                Về trang chủ
+            </a>
+        </div>
+
+        <%
+        function formatPrice(price) {
+            return Number(price || 0).toLocaleString("vi-VN") + " đ";
+        }
+
+        function getStatusLabel(status) {
+            if (status === "pending") return "Chờ xác nhận";
+            if (status === "confirmed") return "Đã xác nhận";
+            if (status === "shipping") return "Đang giao";
+            if (status === "completed") return "Hoàn thành";
+            if (status === "cancelled") return "Đã hủy";
+            return "Không xác định";
+        }
+
+        function getStatusClass(status) {
+            if (status === "pending") return "status-pending";
+            if (status === "confirmed") return "status-confirmed";
+            if (status === "shipping") return "status-shipping";
+            if (status === "completed") return "status-completed";
+            if (status === "cancelled") return "status-cancelled";
+            return "status-pending";
+        }
+
+        function getTimelineText(status) {
+            if (status === "pending") return "Đơn hàng của bạn đã được ghi nhận và đang chờ shop xác nhận.";
+            if (status === "confirmed") return "Shop đã xác nhận đơn hàng và đang chuẩn bị sản phẩm.";
+            if (status === "shipping") return "Đơn hàng đang được bàn giao cho đơn vị vận chuyển.";
+            if (status === "completed") return "Đơn hàng đã giao thành công. Cảm ơn bạn đã mua sắm tại TKD Shop.";
+            if (status === "cancelled") return "Đơn hàng đã bị hủy và sẽ không được xử lý thêm.";
+            return "Đơn hàng đang được xử lý.";
+        }
+
+        function getPaymentText(paymentMethod, paymentStatus) {
+            if (paymentMethod === "cod") {
+                return paymentStatus === "paid"
+                        ? "COD - Đã thanh toán"
+                        : "COD - Chưa thanh toán";
+            }
+
+            if (paymentMethod === "bank_qr") {
+                if (paymentStatus === "paid") return "QR - Đã thanh toán";
+                if (paymentStatus === "pending_confirm") return "QR - Chờ shop xác nhận";
+                return "QR - Chưa thanh toán";
+            }
+
+            return "Chưa có thông tin thanh toán";
+        }
+
+        function getPaymentClass(paymentStatus) {
+            if (paymentStatus === "paid") return "payment-paid";
+            if (paymentStatus === "pending_confirm") return "payment-pending-confirm";
+            return "payment-unpaid";
+        }
+
+        function getPaymentMethodLabel(paymentMethod) {
+            if (paymentMethod === "cod") return "Thanh toán khi nhận hàng";
+            if (paymentMethod === "bank_qr") return "Chuyển khoản QR";
+            return "Không xác định";
+        }
+        %>
+
+        <% if (!orders || orders.length === 0) { %>
+            <div class="empty-box">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <h2>Bạn chưa có đơn hàng nào</h2>
+                <p>Hãy khám phá sản phẩm và đặt đơn đầu tiên của bạn.</p>
+                <a href="/" class="btn btn-primary">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    Mua sắm ngay
+                </a>
+            </div>
+        <% } else { %>
+            <div class="order-list">
+                <% orders.forEach((order) => { %>
+                    <div class="order-card">
+                        <div class="order-head">
+                            <div>
+                                <div class="order-code">Mã đơn #<%= order.id %></div>
+                                <div class="order-date">
+                                    Ngày đặt: <%= new Date(order.date).toLocaleString("vi-VN") %>
+                                </div>
+                            </div>
+
+                            <div class="head-right">
+                                <div class="status-badge <%= getStatusClass(order.status) %>">
+                                    <%= getStatusLabel(order.status) %>
+                                </div>
+
+                                <div class="payment-badge <%= getPaymentClass(order.payment_status || 'unpaid') %>">
+                                    <%= getPaymentText(order.payment_method || 'cod', order.payment_status || 'unpaid') %>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="order-body">
+                            <div class="order-grid">
+                                <div class="info-box">
+                                    <h3 class="section-title">Thông tin nhận hàng</h3>
+
+                                    <div class="info-row"><strong>Người nhận:</strong> <%= order.name %></div>
+                                    <div class="info-row"><strong>SĐT:</strong> <%= order.phone %></div>
+                                    <div class="info-row"><strong>Địa chỉ:</strong> <%= order.address %></div>
+                                    <div class="info-row"><strong>Phương thức thanh toán:</strong> <%= getPaymentMethodLabel(order.payment_method || "cod") %></div>
+                                    <div class="info-row"><strong>Trạng thái thanh toán:</strong> <%= getPaymentText(order.payment_method || "cod", order.payment_status || "unpaid") %></div>
+
+                                    <div class="timeline-box">
+                                        <div class="timeline-title">Tiến trình đơn hàng</div>
+                                        <div class="timeline-text"><%= getTimelineText(order.status) %></div>
+                                    </div>
+                                </div>
+
+                                <div class="items-box">
+                                    <h3 class="section-title">Sản phẩm đã đặt</h3>
+
+                                    <div class="product-list">
+                                        <% order.items.forEach((item) => { %>
+                                            <div class="product-item">
+                                                <img
+                                                        src="<%= item.image %>"
+                                                        alt="<%= item.name %>"
+                                                        class="product-image"
+                                                >
+
+                                                <div class="product-content">
+                                                    <div class="product-name"><%= item.name %></div>
+                                                    <div class="product-meta">
+                                                        Số lượng: <%= item.qty %> · Giá: <%= formatPrice(item.price) %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="order-footer">
+                                <div class="order-total">
+                                    Tổng tiền: <%= formatPrice(order.total) %>
+                                </div>
+
+                                <div class="order-actions">
+                                    <% if (order.status === "pending") { %>
+                                        <form action="/orders/cancel/<%= order.id %>" method="POST" class="cancel-form" onsubmit="return confirm('Bạn có chắc muốn hủy đơn hàng này không?');">
+                                            <button type="submit" class="btn btn-dark">
+                                                <i class="fa-solid fa-xmark"></i>
+                                                Hủy đơn
+                                            </button>
+                                        </form>
+                                    <% } %>
+
+                                    <% if (order.status === "completed") { %>
+                                        <a href="/" class="btn btn-outline">
+                                            <i class="fa-solid fa-rotate-right"></i>
+                                            Mua lại
+                                        </a>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+    </div>
+</div>
+</body>
+</html>

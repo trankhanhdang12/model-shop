@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/addcart/addcart.css" />
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/fontawesome-free-6.6.0-web/css/all.min.css" />
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/css/base.css" />
+    <link rel="stylesheet" href="/legacy/source_code-byTKD/assets/css/main.css" />
+
+    <title><%= product.name %></title>
+
+    <style>
+        .product-extra-card {
+            margin-top: 24px;
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .product-extra-title {
+            margin: 0 0 14px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .product-rating-summary {
+            margin: 14px 0;
+            font-size: 16px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .product-rating-stars {
+            color: #ee4d2d;
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+
+        .product-favorite-form {
+            margin: 14px 0;
+        }
+
+        .product-favorite-btn {
+            min-width: 170px;
+            height: 42px;
+            border: none;
+            border-radius: 10px;
+            background: #ee4d2d;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 0 16px;
+        }
+
+        .product-favorite-btn:hover {
+            opacity: 0.92;
+        }
+
+        .review-form-group {
+            margin-bottom: 14px;
+        }
+
+        .review-form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .review-form-select,
+        .review-form-textarea {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .review-form-textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .review-submit-btn {
+            min-width: 150px;
+            height: 42px;
+            border: none;
+            border-radius: 10px;
+            background: #ee4d2d;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 0 16px;
+        }
+
+        .review-submit-btn:hover {
+            opacity: 0.92;
+        }
+
+        .review-login-note {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .review-login-note a {
+            color: #ee4d2d;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .review-item {
+            padding: 16px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+        }
+
+        .review-user {
+            font-size: 15px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 6px;
+        }
+
+        .review-stars {
+            color: #ee4d2d;
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .review-comment {
+            font-size: 14px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .review-date {
+            margin-top: 6px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .mini-cart-btn {
+            width: 26px;
+            height: 26px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .mini-cart-qty {
+            min-width: 20px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .product-thumb {
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.2s ease;
+        }
+
+        .product-thumb--active {
+            border-color: #ee4d2d;
+        }
+    </style>
+</head>
+
+<body>
+<div class="app">
+    <header class="header">
+        <div class="grid">
+            <nav class="header__navbar">
+                <ul class="header__navbar-list">
+                    <li class="header__navbar-item header__navbar-item--separate">Thế giới mô hình TKD - Shop</li>
+                    <li class="header__navbar-item">
+                        <span class="header__navbar-title--no-pointer">Kết nối</span>
+                        <a href="#" class="header__navbar-icon-link">
+                            <i class="header__navbar-icon fa-brands fa-facebook"></i>
+                        </a>
+                        <a href="#" class="header__navbar-icon-link">
+                            <i class="header__navbar-icon fa-brands fa-instagram"></i>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="header__navbar-list">
+                    <li class="header__navbar-item header__navbar-item--has-notify">
+                        <a href="#" class="header__navbar-item-link">
+                            <i class="header__navbar-icon fa-regular fa-bell"></i> Thông báo
+                        </a>
+
+                        <div class="header__notify">
+                            <header class="header__notify-header">
+                                <h3>Thông báo mới nhận</h3>
+                            </header>
+                            <ul class="header__notify-list">
+                                <li class="header__notify-item header__notify-item--viewed">
+                                    <a href="#" class="header__notify-link">
+                                        <img src="" alt="Ảnh" class="header__notify-img" />
+                                        <div class="header__notify-info">
+                                            <span class="header__notify-name">Thông báo chủ đề</span>
+                                            <span class="header__notify-descriotion">Thông báo mô tả</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                            <footer class="header__notify-footer">
+                                <a href="#" class="header__notify-footer-btn">Xem tất cả</a>
+                            </footer>
+                        </div>
+                    </li>
+
+                    <li class="header__navbar-item">
+                        <a href="#" class="header__navbar-item-link">
+                            <i class="header__navbar-icon fa-solid fa-question"></i> Trợ giúp
+                        </a>
+                    </li>
+
+                    <% if(user){ %>
+                        <li class="header__navbar-item header__navbar-user">
+                            <span class="header__navbar-user-name">
+                                Xin chào <b><%= user.email.split("@")[0] %></b>
+                            </span>
+                        </li>
+
+                        <% if(role !== "admin"){ %>
+                            <li class="header__navbar-item">
+                                <a href="/profile" class="logout-btn">Hồ sơ</a>
+                            </li>
+                        <% } %>
+
+                        <% if(role === "admin"){ %>
+                            <li class="header__navbar-item">
+                                <a href="/admin" class="header__admin-link">
+                                    <i class="fa-solid fa-gear"></i> Admin
+                                </a>
+                            </li>
+                        <% } %>
+
+                        <li class="header__navbar-item">
+                            <form action="/logout" method="POST" class="logout-form">
+                                <button type="submit" class="logout-btn">Đăng xuất</button>
+                            </form>
+                        </li>
+                    <% } else { %>
+                        <li class="header__navbar-item header__navbar-item--strong header__navbar-item--separate">
+                            <a href="/register" class="header__navbar-item-link auth-link">Đăng ký</a>
+                        </li>
+
+                        <li class="header__navbar-item header__navbar-item--strong">
+                            <a href="/login" class="header__navbar-item-link auth-link">Đăng nhập</a>
+                        </li>
+                    <% } %>
+                </ul>
+            </nav>
+
+            <div class="header-with-search">
+                <div class="header__logo">
+                    <a href="/" class="header__logo-link">
+                        <img src="/legacy/source_code-byTKD/assets/img/logo_shop.png" alt="Logo" class="header__logo-img" />
+                    </a>
+                </div>
+
+                <form action="/" method="GET" class="header__search">
+                    <div class="header__search-input-wrap">
+                        <input
+                                type="text"
+                                name="q"
+                                class="header__search-input"
+                                placeholder="Nhập để tìm kiếm sản phẩm"
+                        />
+                    </div>
+
+                    <div class="header__search-select">
+                        <span class="header__search-select-label">Trong Shop</span>
+                        <i class="header__search-select-icon fa-solid fa-angle-down"></i>
+
+                        <ul class="header__search-option">
+                            <li class="header__search-option-item header__search-option-item--active">
+                                <span>Trong Shop</span>
+                                <i class="fa-solid fa-check"></i>
+                            </li>
+                            <li class="header__search-option-item">
+                                <span>Ngoài Shop</span>
+                                <i class="fa-solid fa-check"></i>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button type="submit" class="header__search-btn">
+                        <i class="header__search-btn-icon fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+
+                <div class="header__cart">
+                    <div class="header__cart-wrap">
+                        <a href="/cart" style="text-decoration:none;color:inherit;">
+                            <i class="header__cart-icon fa-solid fa-cart-shopping"></i>
+                        </a>
+
+                        <span class="header__cart-notice quantify">
+                            <%= (cart || []).reduce((sum, item) => sum + (item.qty || 1), 0) %>
+                        </span>
+
+                        <div class="header__cart-list <%= !cart || cart.length === 0 ? 'header__cart-list--no-cart' : '' %>">
+                            <% if (!cart || cart.length === 0) { %>
+                                <div class="no-product">
+                                    <img src="/legacy/source_code-byTKD/assets/img/no_cart.png" alt="" class="header__cart-no-cart-img">
+                                    <span class="header__cart-list-no-cart-msg">Chưa có sản phẩm</span>
+                                </div>
+                            <% } else { %>
+                                <h4 class="header__cart-heading">Sản phẩm đã thêm</h4>
+
+                                <ul class="header__cart-list-item">
+                                    <% cart.forEach(item => { %>
+                                        <li class="header__cart-item">
+                                            <img src="<%= item.image %>" alt="Ảnh" class="header__cart-img">
+
+                                            <div class="header__cart-item-info">
+                                                <div class="header__cart-item-head">
+                                                    <h5 class="header__cart-item-name"><%= item.name %></h5>
+
+                                                    <div class="header__cart-item-price-wrap">
+                                                        <span class="header__cart-item-price">
+                                                            <%= (item.price || 0).toLocaleString("vi-VN") %>đ
+                                                        </span>
+                                                        <span class="header__cart-item-multiply">x</span>
+                                                        <span class="header__cart-item-qnt"><%= item.qty || 1 %></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="header__cart-item-body">
+                                                    <span class="header__cart-item-description">ID: <%= item.id %></span>
+
+                                                    <div style="display:flex; align-items:center; gap:6px; margin-left:auto;">
+                                                        <form action="/cart/decrease/<%= item.id %>" method="POST" style="margin:0;">
+                                                            <button type="submit" class="mini-cart-btn">-</button>
+                                                        </form>
+
+                                                        <span class="mini-cart-qty"><%= item.qty || 1 %></span>
+
+                                                        <form action="/cart/increase/<%= item.id %>" method="POST" style="margin:0;">
+                                                            <button type="submit" class="mini-cart-btn">+</button>
+                                                        </form>
+
+                                                        <form action="/cart/remove/<%= item.id %>" method="POST" style="margin:0;">
+                                                            <button type="submit" class="header__cart-item-remove" style="background:none;border:none;cursor:pointer;">
+                                                                Xoá
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    <% }) %>
+                                </ul>
+
+                                <a href="/cart" class="header__cart-view-cart btn btn--primary">Xem giỏ hàng</a>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="app__containercart">
+        <div class="grid">
+            <div class="grid__row">
+                <div class="addcart__list">
+                    <ul class="addcart__lists">
+                        <li class="addcart__item">
+                            <a href="/" class="addcart__item-link">Trang chủ</a>
+                            <span class="addcart__item-gach">/</span>
+                        </li>
+                        <li class="addcart__item">
+                            <a href="/" class="addcart__item-link"><%= product.category %></a>
+                            <span class="addcart__item-gach">/</span>
+                        </li>
+                        <li class="addcart__item">
+                            <span><%= product.name %></span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="grid__column-5-5">
+                    <div class="grid__row">
+                        <div class="addcart__imgpig">
+                            <%
+                            const gallery = [
+                                product.image,
+                                product.image2,
+                                product.image3,
+                                product.image4
+                            ].filter(Boolean);
+                            %>
+
+                            <div class="addcart__img">
+                                <% gallery.forEach((img, index) => { %>
+                                    <img
+                                            src="<%= img %>"
+                                            alt="Ảnh sản phẩm"
+                                            onclick="myFunction(this)"
+                                            class="product-thumb <%= index === 0 ? 'product-thumb--active' : '' %>"
+                                    />
+                                <% }) %>
+                            </div>
+
+                            <div class="addcart__containerimg">
+                                <img
+                                        src="<%= gallery[0] || '' %>"
+                                        alt="Ảnh lớn sản phẩm"
+                                        style="width: 100%;"
+                                        id="imgBox"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid__column-5-5 grid__column-5-5-khongpx">
+                    <div class="grid__row">
+                        <div class="addcart__comment">
+                            <div class="product-info-card">
+                                <div class="product-info-top">
+                                    <h1 class="product-info-title"><%= product.name %></h1>
+
+                                    <div class="product-info-brand">
+                                        Thương hiệu:
+                                        <a href="#"><%= product.brand %></a>
+                                    </div>
+
+                                    <div class="product-price-box">
+                        <span class="product-price-old">
+                            <%= (product.oldPrice || product.price).toLocaleString("vi-VN") %>đ
+                        </span>
+
+                                        <span class="product-price-current">
+                            <%= product.price.toLocaleString("vi-VN") %>đ
+                        </span>
+                                    </div>
+
+                                    <div class="product-rating-box">
+                                        <div class="product-rating-line">
+                                            <span class="product-rating-label">Đánh giá</span>
+                                            <span class="product-rating-value"><%= product.avgRating || 0 %>/5</span>
+                                        </div>
+
+                                        <div class="product-rating-stars">
+                                            <%
+                                            const rounded = Math.round(product.avgRating || 0);
+                                            for (let i = 1; i <= 5; i++) {
+                                            %>
+                                                <i class="fa-solid fa-star <%= i <= rounded ? 'star-active' : 'star-inactive' %>"></i>
+                                            <% } %>
+                                        </div>
+
+                                        <div class="product-rating-count">
+                                            <%= product.reviewCount || 0 %> lượt đánh giá
+                                        </div>
+                                    </div>
+
+                                    <form action="/favorites/toggle/<%= product.id %>" method="POST" class="product-favorite-form">
+                                        <button type="submit" class="product-favorite-btn">
+                                            <i class="fa-solid fa-heart"></i>
+                                            <%= product.isFavorite ? "Đã yêu thích" : "Yêu thích" %>
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <div class="product-action-row">
+                                    <div class="product-chat-box">
+                                        <a href="#">
+                                            <i class="fa-brands fa-facebook-messenger"></i>
+                                            <span>Chat ngay</span>
+                                        </a>
+                                    </div>
+
+                                    <div class="product-add-cart-box">
+                                        <form action="/cart/add/<%= product.id %>" method="POST">
+                                            <button type="submit">THÊM VÀO GIỎ</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="product-policy-grid">
+                                <div class="product-policy-card">
+                                    <span>TKD - Shop chuyên cung cấp mọi loại mô hình chính hãng trên thế giới.</span>
+                                </div>
+
+                                <div class="product-policy-card">
+                                    <span>Vui lòng nhắn tin để được hỗ trợ nhanh nhất.</span>
+                                </div>
+                            </div>
+
+                            <ul class="accordion">
+                                <li>
+                                    <input type="radio" name="accordion" id="first" checked>
+                                    <label for="first">THÔNG TIN SẢN PHẨM</label>
+                                    <div class="content">
+                                        <p>Thông tin sản phẩm: <%= product.name %></p>
+                                        <p>Giá: <%= product.price.toLocaleString("vi-VN") %>đ</p>
+                                        <p>Danh mục: <%= product.category %></p>
+                                        <p>Thương hiệu: <%= product.brand %></p>
+                                        <p>Note: Trưng bày</p>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <input type="radio" name="accordion" id="second">
+                                    <label for="second">DỊCH VỤ GIAO HÀNG</label>
+                                    <div class="content">
+                                        <p>Cam kết 100% chính hãng</p>
+                                        <p>Giao hàng: Thứ 2 - Thứ 7 từ 9h00 - 22h00</p>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div class="product-extra-card">
+                                <h3 class="product-extra-title">Đánh giá sản phẩm</h3>
+
+                                <% if (user) { %>
+                                    <form action="/product/<%= product.id %>/review" method="POST">
+                                        <div class="review-form-group">
+                                            <label class="review-form-label">Chấm điểm</label>
+                                            <select name="rating" class="review-form-select" required>
+                                                <option value="">-- Chọn số sao --</option>
+                                                <option value="5" <%= userReview && userReview.rating == 5 ? "selected" : "" %>>5 sao</option>
+                                                <option value="4" <%= userReview && userReview.rating == 4 ? "selected" : "" %>>4 sao</option>
+                                                <option value="3" <%= userReview && userReview.rating == 3 ? "selected" : "" %>>3 sao</option>
+                                                <option value="2" <%= userReview && userReview.rating == 2 ? "selected" : "" %>>2 sao</option>
+                                                <option value="1" <%= userReview && userReview.rating == 1 ? "selected" : "" %>>1 sao</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="review-form-group">
+                                            <label class="review-form-label">Nhận xét</label>
+                                            <textarea name="comment" class="review-form-textarea"><%= userReview ? userReview.comment : "" %></textarea>
+                                        </div>
+
+                                        <button type="submit" class="review-submit-btn">Gửi đánh giá</button>
+                                    </form>
+                                <% } else { %>
+                                    <p class="review-login-note">
+                                        Vui lòng <a href="/login">đăng nhập</a> để đánh giá sản phẩm.
+                                    </p>
+                                <% } %>
+                            </div>
+
+                            <div class="product-extra-card">
+                                <h3 class="product-extra-title">Nhận xét từ khách hàng</h3>
+
+                                <% if (!reviews || reviews.length === 0) { %>
+                                    <p class="review-login-note">Chưa có đánh giá nào cho sản phẩm này.</p>
+                                <% } else { %>
+                                    <% reviews.forEach((review) => { %>
+                                        <div class="review-item">
+                                            <div class="review-user"><%= review.email %></div>
+
+                                            <div class="review-stars">
+                                                <%= "★".repeat(review.rating) %><%= "☆".repeat(5 - review.rating) %>
+                                            </div>
+
+                                            <div class="review-comment">
+                                                <%= review.comment || "Không có nhận xét." %>
+                                            </div>
+
+                                            <div class="review-date">
+                                                <%= new Date(review.updated_at || review.created_at).toLocaleString("vi-VN") %>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="grid">
+            <div class="grid__row">
+                <div class="grid__column-2-4">
+                    <h3 class="footer__heading">Chăm sóc khách hàng</h3>
+                    <ul class="footer-list">
+                        <li class="footer-item"><a href="#" class="footer-item__link">Trung tâm trợ giúp</a></li>
+                        <li class="footer-item"><a href="#" class="footer-item__link">TKD - Shop Mall</a></li>
+                        <li class="footer-item"><a href="#" class="footer-item__link">Hướng dẫn mua hàng</a></li>
+                    </ul>
+                </div>
+
+                <div class="grid__column-2-4">
+                    <h3 class="footer__heading">Giới thiệu về TKD - Shop</h3>
+                    <ul class="footer-list">
+                        <li class="footer-item"><a href="#" class="footer-item__link">Giới thiệu về TKD - Shop Việt Nam</a></li>
+                        <li class="footer-item"><a href="#" class="footer-item__link">Tuyển dụng</a></li>
+                        <li class="footer-item"><a href="#" class="footer-item__link">Điều khoản TKD - Shop</a></li>
+                    </ul>
+                </div>
+
+                <div class="grid__column-2-4">
+                    <h3 class="footer__heading">Danh mục</h3>
+                    <ul class="footer-list">
+                        <li class="footer-item"><a href="#" class="footer-item__link">Dragon Ball</a></li>
+                        <li class="footer-item"><a href="#" class="footer-item__link">One Piece</a></li>
+                        <li class="footer-item"><a href="#" class="footer-item__link">Naruto</a></li>
+                    </ul>
+                </div>
+
+                <div class="grid__column-2-4">
+                    <h3 class="footer__heading">Theo dõi</h3>
+                    <ul class="footer-list">
+                        <li class="footer-item"><a href="#" class="footer-item__link"><i class="footer-item__icon fa-brands fa-facebook-f"></i> Facebook</a></li>
+                        <li class="footer-item"><a href="#" class="footer-item__link"><i class="footer-item__icon fa-brands fa-instagram"></i> Instagram</a></li>
+                        <li class="footer-item"><a href="#" class="footer-item__link"><i class="footer-item__icon fa-brands fa-tiktok"></i> Tiktok</a></li>
+                    </ul>
+                </div>
+
+                <div class="grid__column-2-4">
+                    <h3 class="footer__heading">Hỗ trợ khách hàng</h3>
+                    <ul class="footer-list">
+                        <li class="footer-item"><a href="#" class="footer-item__link">Chính sách mua hàng</a></li>
+                        <li class="footer-item"><a href="#" class="footer-item__link">Chính sách đổi trả</a></li>
+                        <li class="footer-item"><a href="#" class="footer-item__link">Chính sách bảo mật</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer__bottom">
+            <div class="grid">
+                <p class="footer__text">© 2026 - Bản quyền thuộc về công ty TKD - Shop</p>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    function myFunction(smallImg) {
+        const fullImg = document.getElementById("imgBox");
+        fullImg.src = smallImg.src;
+
+        document.querySelectorAll(".product-thumb").forEach((img) => {
+            img.classList.remove("product-thumb--active");
+        });
+
+        smallImg.classList.add("product-thumb--active");
+    }
+</script>
+
+<script src="/legacy/source_code-byTKD/assets/js/main.js"></script>
+</body>
+</html>
