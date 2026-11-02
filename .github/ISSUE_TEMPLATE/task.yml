@@ -1,0 +1,29 @@
+
+name: "Task"
+description: "Tạo công việc mới cho TKD-Shop"
+title: "[Task] "
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: "Mục tiêu"
+      description: "Mô tả mục tiêu công việc"
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: "Các công việc cần làm"
+      value: |
+        - [ ] Công việc 1
+        - [ ] Công việc 2
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: "Tiêu chí hoàn thành"
+    validations:
+      required: true
