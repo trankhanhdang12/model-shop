@@ -10,6 +10,22 @@ const {
     calculateShippingFee
 } = require("./services/pricing");
 const app = express();
+const logger = require("./config/logger");
+
+app.use((req, res, next) => {
+    const start = Date.now();
+
+    res.on("finish", () => {
+        logger.info("HTTP request completed", {
+            method: req.method,
+            path: req.path,
+            statusCode: res.statusCode,
+            durationMs: Date.now() - start
+        });
+    });
+
+    next();
+});
 const usersFile = path.join(__dirname, "users.json");
 
 app.use(express.urlencoded({ extended: true }));
@@ -88,10 +104,6 @@ function normalizeProduct(product) {
     };
 }
 
-function calculateShippingFee(subtotal) {
-    return 30000;
-}
-
 async function getValidVoucher(code, subtotal) {
     if (!code) return null;
 
@@ -112,24 +124,6 @@ async function getValidVoucher(code, subtotal) {
     if (subtotal < Number(voucher.min_order_value || 0)) return null;
 
     return voucher;
-}
-
-function calculateDiscount(voucher, subtotal) {
-    if (!voucher) return 0;
-
-    let discount = 0;
-
-    if (voucher.discount_type === "fixed") {
-        discount = Number(voucher.discount_value || 0);
-    } else if (voucher.discount_type === "percent") {
-        discount = Math.floor(subtotal * Number(voucher.discount_value || 0) / 100);
-        if (voucher.max_discount) {
-            discount = Math.min(discount, Number(voucher.max_discount));
-        }
-    }
-
-    if (discount > subtotal) discount = subtotal;
-    return discount;
 }
 
 function generateTransferCode(orderId) {
@@ -2099,6 +2093,17 @@ app.post("/webhooks/bank-transfer", async(req, res) => {
     }
 });
 // ================= START SERVER =================
-app.listen(3000, () => {
-    console.log("Server running: http://localhost:3000");
+const port = process.env.PORT || 3000;
+const server = app.listen(port);
+
+server.on("listening", () => {
+    console.log(`Server running: http://localhost:${server.address().port}`);
+});
+
+server.on("error", (err) => {
+    logger.error("Server failed to start", { code: err.code, message: err.message });
+    if (err.code === "EADDRINUSE") {
+        console.error(`Cổng ${port} đang được sử dụng. Hãy dừng server cũ hoặc chạy với PORT khác.`);
+    }
+    process.exitCode = 1;
 });
