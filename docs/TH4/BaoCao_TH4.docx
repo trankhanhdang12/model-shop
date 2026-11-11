@@ -1,0 +1,43 @@
+# BÁO CÁO THỰC HÀNH 4
+## DỰ ÁN TKD-SHOP
+
+**Sinh viên:** Trần Khánh Đăng  
+**MSSV:** 2311110003  
+**Giảng viên:** Hoàng Ngọc Long
+
+### 1. Giới thiệu
+Dự án TKD-Shop sử dụng Node.js, Express.js, EJS và MySQL. Thực hành 4 tập trung vào quản lý thay đổi CR-01, kiểm thử hồi quy và phát hành phiên bản.
+
+### 2. Kết quả kiểm thử
+- Tổng số Unit Test: 11
+- Passed: 11
+- Failed: 0
+- Phạm vi: Module pricing.
+
+Kiểm tra cú pháp ứng dụng chưa đạt do khai báo trùng `calculateShippingFee` tại `app.js:91`.
+
+### 3. Quản lý phiên bản
+Repository: https://github.com/trankhanhdang12/model-shop
+
+Đã có tag `v1.0.0` và `v1.1.0`.
+
+Tuy nhiên, `v1.1.0` đang trỏ đến commit `ae5f984`, bổ sung báo cáo TH3, chưa chứng minh được CR-01 đã hoàn thành.
+
+### 4. So sánh phiên bản
+Kết quả `git diff --stat v1.0.0 v1.1.0` ghi nhận:
+- Bổ sung báo cáo Lab 2.
+- Bổ sung báo cáo Word Lab 3.
+
+Chưa ghi nhận thay đổi chức năng CR-01 trong phạm vi so sánh này.
+
+### 5. Hạn chế và hướng khắc phục
+- Khắc phục lỗi khai báo trùng trong `app.js`.
+- Hoàn thiện CR-01 và kiểm thử chấp nhận.
+- Chạy lại CI và kiểm thử hồi quy.
+- Rà soát bản phát hành `v1.1.0`.
+
+### 6. Sử dụng AI
+ChatGPT được sử dụng hỗ trợ phân tích lỗi JavaScript, giải thích Git Workflow và hướng dẫn cấu trúc báo cáo. Kết quả được đối chiếu với Terminal. Các đề xuất chưa kiểm chứng không được coi là kết quả đã hoàn thành.
+
+### 7. Kết luận
+Đã thực hiện kiểm tra phiên bản và kiểm thử đơn vị, với 11/11 bài test đạt. Tuy nhiên, ứng dụng còn lỗi cú pháp và các yêu cầu hoàn thiện CR-01, kiểm thử hồi quy, phát hành phiên bản chưa được xác nhận hoàn thành.
