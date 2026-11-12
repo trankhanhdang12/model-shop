@@ -113,7 +113,7 @@ async function getValidVoucher(code, subtotal) {
 
 
 function generateTransferCode(orderId) {
-    return `TKDSHOP-${orderId}`;
+    return `TKD${String(orderId).padStart(6, "0")}`;
 }
 // ===== GLOBAL MIDDLEWARE =====
 app.use(async(req, res, next) => {
@@ -699,10 +699,57 @@ app.get("/checkout", async(req, res) => {
     }
 });
 
+
+// Kiểm tra thanh toán Sandbox của đơn trong phiên hiện tại
+app.get("/api/sandbox-payment/status/:id", async(req, res) => {
+    const id = Number(req.params.id);
+
+    if (!Number.isSafeInteger(id) ||
+        id <= 0 ||
+        req.session.sandboxOrderId !== id) {
+        return res.status(403).json({ error: "Forbidden" });
+    }
+
+    try {
+        const [rows] = await db.query(
+            `SELECT payment_status
+             FROM orders
+             WHERE id = ? AND payment_method = 'online_sandbox'`, [id]
+        );
+
+        if (!rows.length) {
+            return res.status(404).json({ error: "Not found" });
+        }
+
+        res.set("Cache-Control", "no-store");
+        res.json({ paid: rows[0].payment_status === "paid" });
+    } catch (err) {
+        console.error("Sandbox status error:", err.message);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
 app.post("/checkout", async(req, res) => {
     try {
         const { name, phone, address, payment_method, voucher_code } = req.body;
         const cart = req.session.cart || [];
+
+        const cleanName = String(name || "").trim();
+        const cleanPhone = String(phone || "").replace(/[\s.-]/g, "");
+        const cleanAddress = String(address || "").trim();
+
+        if (cleanName.length < 2 || cleanName.length > 100) {
+            return res.status(400).send("Họ tên người nhận không hợp lệ");
+        }
+
+        if (!/^0[35789]\d{8}$/.test(cleanPhone)) {
+            return res.status(400).send("Số điện thoại Việt Nam không hợp lệ");
+        }
+
+        if (cleanAddress.length < 5 || cleanAddress.length > 255) {
+            return res.status(400).send("Địa chỉ giao hàng không hợp lệ");
+        }
+
 
         if (!name || !phone || !address) {
             return res.status(400).send("Vui lòng nhập đầy đủ thông tin giao hàng");
@@ -711,7 +758,11 @@ app.post("/checkout", async(req, res) => {
         if (!payment_method) {
             return res.status(400).send("Vui lòng chọn phương thức thanh toán");
         }
-
+        if (!["cod", "bank_qr", "online_sandbox"].includes(payment_method)) {
+            return res.status(400).send(
+                "Phương thức thanh toán chưa được hỗ trợ"
+            );
+        }
         if (cart.length === 0) {
             return res.redirect("/cart");
         }
@@ -754,9 +805,9 @@ app.post("/checkout", async(req, res) => {
             `, [
                 currentUser ? currentUser.id : null,
                 req.session.user ? req.session.user.email : null,
-                name,
-                phone,
-                address,
+                cleanName,
+                cleanPhone,
+                cleanAddress,
                 subtotal,
                 shippingFee,
                 discountAmount,
@@ -769,6 +820,10 @@ app.post("/checkout", async(req, res) => {
         );
 
         const orderId = orderResult.insertId;
+        if (payment_method === "online_sandbox") {
+            req.session.sandboxOrderId = orderId;
+        }
+
         const transferCode = generateTransferCode(orderId);
 
         await db.query(
