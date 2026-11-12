@@ -405,18 +405,10 @@
         }
 
         function getPaymentText(paymentMethod, paymentStatus) {
-            if (paymentMethod === "cod") {
-                return paymentStatus === "paid"
-                        ? "COD - Đã thanh toán"
-                        : "COD - Chưa thanh toán";
-            }
-
-            if (paymentMethod === "bank_qr") {
-                if (paymentStatus === "paid") return "QR - Đã thanh toán";
-                if (paymentStatus === "pending_confirm") return "QR - Chờ shop xác nhận";
-                return "QR - Chưa thanh toán";
-            }
-
+            if (paymentStatus === "paid") return "Đã thanh toán";
+            if (paymentMethod === "online_sandbox") return "SePay Sandbox - Chờ thanh toán";
+            if (paymentMethod === "bank_qr") return "QR - Chờ xác nhận";
+            if (paymentMethod === "cod") return "COD - Chưa thanh toán";
             return "Chưa có thông tin thanh toán";
         }
 
@@ -427,8 +419,12 @@
         }
 
         function getPaymentMethodLabel(paymentMethod) {
-            if (paymentMethod === "cod") return "Thanh toán khi nhận hàng";
-            if (paymentMethod === "bank_qr") return "Chuyển khoản QR";
+            if (paymentMethod === "online_sandbox")
+                return "Thanh toán online (SePay Sandbox)";
+            if (paymentMethod === "bank_qr")
+                return "Chuyển khoản QR";
+            if (paymentMethod === "cod")
+                return "Thanh toán khi nhận hàng";
             return "Không xác định";
         }
         %>
@@ -451,7 +447,7 @@
                             <div>
                                 <div class="order-code">Mã đơn #<%= order.id %></div>
                                 <div class="order-date">
-                                    Ngày đặt: <%= new Date(order.date).toLocaleString("vi-VN") %>
+                                    Ngày đặt: <%= order.created_at ? new Date(order.created_at).toLocaleString("vi-VN") : "Chưa có ngày" %>
                                 </div>
                             </div>
 
@@ -509,7 +505,7 @@
 
                             <div class="order-footer">
                                 <div class="order-total">
-                                    Tổng tiền: <%= formatPrice(order.total) %>
+                                    Tổng tiền: <%= formatPrice(order.final_total ?? order.total) %>
                                 </div>
 
                                 <div class="order-actions">

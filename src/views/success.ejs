@@ -370,6 +370,7 @@
         }
 
         function getPaymentMethodLabel(method) {
+            if (method === "online_sandbox") return "Thanh toán online (SePay Sandbox)";
             if (method === "bank_qr") return "Chuyển khoản QR";
             return "Thanh toán khi nhận hàng (COD)";
         }
@@ -377,6 +378,7 @@
         function getPaymentStatusLabel(status, method) {
             if (status === "paid") return "Đã thanh toán";
             if (status === "pending_confirm") return "Chờ xác nhận / Chờ hệ thống đối soát";
+            if (method === "online_sandbox") return "Đang chờ thanh toán Sandbox";
             if (method === "bank_qr") return "Chưa thanh toán";
             return "Thanh toán khi nhận hàng";
         }
@@ -384,6 +386,7 @@
         function getPaymentStatusClass(status, method) {
             if (status === "paid") return "status-paid";
             if (status === "pending_confirm") return "status-pending-confirm";
+            if (method === "online_sandbox") return "status-unpaid";
             if (method === "bank_qr") return "status-unpaid";
             return "status-pending";
         }
@@ -468,6 +471,104 @@
                             </div>
                         </div>
                     </div>
+                <% } %>
+
+
+                <% if (paymentMethod === "online_sandbox") { %>
+                <div class="transfer-box" id="sandboxPaymentBox">
+                    <h2 class="transfer-title">Thanh toán SePay Sandbox</h2>
+
+                    <p><strong>Số tiền:</strong>
+                        <%= formatPrice(finalTotalValue) %>
+                    </p>
+
+                    <p><strong>Mã chuyển khoản:</strong>
+                        <%= order.transfer_code %>
+                    </p>
+
+                    <p>
+                        Đây là môi trường thử nghiệm, không chuyển tiền thật.
+                        Mở SePay Test mode → Mô phỏng tạo mã VietQR,
+                        dùng tài khoản giả lập và nhập đúng thông tin trên.
+                    </p>
+
+                    <div style="text-align:center; margin:20px 0">
+                        <img
+                            src="https://vietqr.app/img?bank=Vietcombank&amp;acc=SBSEPAYKZPVHC7MFWJ3&amp;template=compact&amp;amount=<%= encodeURIComponent(finalTotalValue) %>&amp;des=<%= encodeURIComponent(order.transfer_code || '') %>"
+                            alt="QR SePay Sandbox"
+                            style="width:240px;max-width:100%;border-radius:12px"
+                        >
+                        <p><strong>QR THỬ NGHIỆM - KHÔNG CHUYỂN TIỀN THẬT</strong></p>
+                        <p>Mã: <%= order.transfer_code %></p>
+                    </div>
+
+                    <p id="sandboxPaymentMessage" role="status"
+                       aria-live="polite">
+                        Đang chờ xác nhận thanh toán...
+                    </p>
+
+                    <a href="https://my.sepay.vn/"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        Mở SePay Test mode
+                    </a>
+                </div>
+
+                <script>
+                (() => {
+                    const orderId = <%- JSON.stringify(Number(order.id)) %>;
+                    const message = document.getElementById(
+                        "sandboxPaymentMessage"
+                    );
+
+                    let finished = false;
+                    let checking = false;
+
+                    async function checkPayment() {
+                        if (finished || checking) return;
+                        checking = true;
+
+                        try {
+                            const response = await fetch(
+                                "/api/sandbox-payment/status/" + orderId,
+                                { cache: "no-store" }
+                            );
+
+                            if (!response.ok) return;
+
+                            const result = await response.json();
+
+                            if (result.paid === true) {
+                                finished = true;
+                                message.textContent =
+                                    "Thanh toán thành công!";
+                                message.style.color = "green";
+                                message.style.fontWeight = "bold";
+
+                                document.querySelectorAll(
+                                    ".status-pill"
+                                ).forEach(el => {
+                                    el.textContent = "Đã thanh toán";
+                                    el.className = "status-pill status-paid";
+                                });
+                            }
+                        } catch (err) {
+                            console.warn("Chưa kiểm tra được thanh toán");
+                        } finally {
+                            checking = false;
+                        }
+                    }
+
+                    checkPayment();
+                    const timer = setInterval(() => {
+                        if (finished) {
+                            clearInterval(timer);
+                        } else {
+                            checkPayment();
+                        }
+                    }, 3000);
+                })();
+                </script>
                 <% } %>
 
                 <div class="section-grid">

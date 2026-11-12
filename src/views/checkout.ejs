@@ -519,6 +519,24 @@
                         </label>
                     </div>
 
+                    <label class="payment-option">
+                        <div>
+                            <input
+                                type="radio"
+                                name="payment_method"
+                                value="online_sandbox"
+
+                                onchange="toggleQRCode()"
+                            >
+                            <span class="payment-option-title">
+                                Thanh toán online (Sandbox)
+                            </span>
+                        </div>
+                        <div class="payment-option-desc">
+                            Đang chuẩn bị tích hợp cổng thanh toán thử nghiệm.
+                        </div>
+                    </label>
+
                     <div id="qrBox" class="qr-box">
                         <div class="qr-title">Thông tin chuyển khoản</div>
 
